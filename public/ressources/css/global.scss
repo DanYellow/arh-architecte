@@ -1,0 +1,258 @@
+@import "mq.scss";
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-family: "Quicksand", sans-serif;
+    color: var(--black-text-color);
+    background-color: var(--light-grey-color);
+}
+
+/* 
+  Le code ci-dessous permet de retirer 
+  les animations pour les personnes qui ont décidé de les désactiver 
+*/
+@media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+        animation-delay: -1ms !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        background-attachment: initial !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
+    }
+}
+
+:root {
+    --blue-color: #17586e;
+    --pink-color: #f11d4d;
+    --light-white-color: aliceblue;
+    --light-grey-color: #fcfcfc;
+    --black-text-color: #333333;
+}
+
+.footer,
+.main-header,
+.main-container {
+    padding: 0 2.5%;
+    max-width: 1260px;
+    margin: 0 auto;
+
+    @include mobile {
+        padding: 0 5%;
+    }
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    width: 100%;
+}
+
+main {
+    position: relative;
+}
+
+.main-header {
+    margin: 45px auto 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    @include tablet-max {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navigation-content {
+        display: flex;
+        column-gap: 40px;
+        justify-content: flex-end;
+
+        @include tablet-max {
+            margin-top: 2rem;
+        }
+
+        .navigation-item a {
+            display: block;
+            padding: 4px 10px;
+            color: var(--black-text-color);
+            font-size: 1.25rem;
+            letter-spacing: 0.3rem;
+
+            &.active {
+                font-weight: 600;
+            }
+
+            &:hover,
+            &:focus {
+                color: var(--pink-color);
+            }
+            &:active {
+                color: var(--blue-color);
+            }
+        }
+    }
+
+    .title {
+        font-size: 1.5rem;
+        color: var(--blue-color);
+        letter-spacing: 0.35rem;
+
+        @include mobile {
+            font-size: 2.5rem;
+        }
+    }
+
+    .description {
+        font-size: 1.25rem;
+        margin-top: 0.6rem;
+        color: var(--black-text-color);
+    }
+
+    .navigation-container {
+        flex: 1 0 0%;
+    }
+
+    .texts-container {
+        display: flex;
+        column-gap: 12px;
+
+        &:hover,
+        &:focus {
+            .title {
+                color: var(--pink-color);
+            }
+        }
+
+        figure {
+            width: 60px;
+            flex-shrink: 0;
+        }
+    }
+}
+
+.list-projects {
+    gap: 20px 15px;
+    display: flex;
+    flex-direction: column;
+
+    .project {
+        a {
+            position: relative;
+            display: block;
+            color: var(--black-text-color);
+            &:hover,
+            &:focus {
+                color: var(--pink-color);
+                svg {
+                    fill: var(--pink-color);
+                }
+            }
+            &:active {
+                color: var(--blue-color);
+                svg {
+                    fill: var(--blue-color);
+                }
+            }
+        }
+
+        svg {
+            fill: var(--light-white-color);
+        }
+
+        figure {
+            overflow: hidden;
+            position: relative;
+            &::after {
+                content: "";
+                display: block;
+                background: linear-gradient(
+                    180deg,
+                    rgba(255, 255, 255, 0) 36%,
+                    rgba(51, 51, 51, 1) 100%
+                );
+                position: absolute;
+                height: 100px;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+        }
+
+        img {
+            display: block;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 1.25rem;
+            position: absolute;
+            bottom: 21px;
+            left: calc(100% + 15px);
+            padding: 0;
+            width: 200px;
+            margin-bottom: 0;
+        }
+
+        .icon-container {
+            position: absolute;
+            z-index: 1;
+            bottom: 16px;
+            right: 20px;
+        }
+    }
+}
+
+.footer {
+    .footer-content {
+        margin: 30px auto 0;
+        width: 95.635492063%;
+        padding: 3.375rem 0;
+        border-top: 2px solid var(--blue-color);
+    }
+
+    .title {
+        font-size: 1.4rem;
+        letter-spacing: 0.25rem;
+        color: var(--blue-color);
+    }
+
+    .address {
+        margin-top: 45px;
+    }
+
+    .address,
+    .e-mail {
+        font-size: 1rem;
+    }
+
+    .e-mail {
+        color: var(--pink-color);
+    }
+}
+
+.go-to-top {
+    display: block;
+    text-align: center;
+    margin-top: 5rem;
+    font-size: 1.25rem;
+    color: var(--blue-color);
+    &:hover,
+    &:focus {
+        color: var(--pink-color);
+    }
+    &:active {
+        color: var(--blue-color);
+    }
+}
