@@ -15,15 +15,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap"
       rel="stylesheet" />
 
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="{{ absolute_url('/favicon.ico') }}" />
     <link rel="stylesheet"
       href="{{ absolute_url('ressources/css/reset.css') }}" />
     <link rel="stylesheet"
       href="{{ absolute_url('ressources/css/global.css') }}" />
 
-    {% block css_page %}
-
-    {% endblock %}
+    {% block css_page %}{% endblock %}
   </head>
 
   <body>
@@ -34,5 +32,6 @@
       {% endblock %}
     </main>
     {% include 'front/includes/footer.html.twig' %}
+    {% block javascripts %}{% endblock %}
   </body>
 </html>

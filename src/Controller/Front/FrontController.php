@@ -8,9 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class FrontController extends AbstractController
 {
     /**
-     * @Route("/{page}", name="index")
+     * @Route("/{page}", name="index", requirements={"page"="\d+"})
      */
-    public function index(int $page)
+    public function index(int $page = 1)
     {
         return $this->render('front/index.html.twig', [
             "list_projects" => ["", "", ""]
