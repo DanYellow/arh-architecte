@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Controller\Back;
+namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ProjectController extends AbstractController
+class ProjectController2 extends AbstractController
 {
     /**
      * @Route("/project", name="app_project")

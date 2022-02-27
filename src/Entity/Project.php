@@ -33,12 +33,15 @@ class Project
     #[ORM\Column(type: 'smallint')]
     private $year;
 
-    #[ORM\OneToMany(mappedBy: 'project', targetEntity: ProjectImage::class)]
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: ProjectImage::class, cascade: ["persist", "remove"])]
     private $projectImages;
 
     public function __construct()
     {
         $this->projectImages = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
+        $this->year = date('Y');
+        $this->slug = "";
     }
 
     public function getId(): ?int
@@ -146,5 +149,10 @@ class Project
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\ProjectImage;
+
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -9,13 +11,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use App\Entity\Project;
+
 class DashboardController extends AbstractDashboardController
 {
     // #[IsGranted("ROLE_ADMIN")]
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        return parent::index();
+        return $this->render('admin/index.html.twig');
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
         //
@@ -37,17 +41,25 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Arh Architecte');
+            ->setTranslationDomain('admin')
+            ->setTitle('Armelle Richard–Hue Architecte');
     }
+    
 
     public function configureMenuItems(): iterable
     {
-        return [
-            MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
+        // return [
+        //     MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
+        //     MenuItem::linkToCrud('Projets', 'fa fa-tags', Project::class),
+        // ];
+        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToCrud('Projets', 'fas fa-list', Project::class);
+        yield MenuItem::linkToCrud('ProjectImage', 'fas fa-list', ProjectImage::class);
 
-            MenuItem::section('Blog'),
-        ];
-        // yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+        yield MenuItem::section();
+        yield MenuItem::linkToUrl('Accéder au site', null, '/');
+        yield MenuItem::section();
+        // yield MenuItem::linkToExitImpersonation('Stop impersonation', 'fa fa-exit');
+        // yield MenuItem::linkToLogout('Logout', 'fa fa-exit');
     }
 }
