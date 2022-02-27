@@ -17,7 +17,7 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('@EasyAdmin/page/login.html.twig', [
+        return $this->render('admin/login.html.twig', [
             // parameters usually defined in Symfony login forms
             'error' => $error,
             'last_username' => $lastUsername,
@@ -33,13 +33,12 @@ class SecurityController extends AbstractController
             // the title visible above the login form (define this option only if you are
             // rendering the login template in a regular Symfony controller; when rendering
             // it from an EasyAdmin Dashboard this is automatically set as the Dashboard title)
-            'page_title' => 'ACME login',
+            'page_title' => 'Administration - Armelle Richard – Hue Architecte',
 
             // the string used to generate the CSRF token. If you don't define
             // this parameter, the login form won't include a CSRF token
-            'csrf_token_intention' => 'authenticate',
+            // 'csrf_token_intention' => 'authenticate',
 
-            // the URL users are redirected to after the login (default: '/admin')
             'target_path' => $this->generateUrl('admin'),
 
             // the label displayed for the username form field (the |trans filter is applied to it)
@@ -49,7 +48,7 @@ class SecurityController extends AbstractController
             'password_label' => 'Mot de passe',
 
             // the label displayed for the Sign In form button (the |trans filter is applied to it)
-            'sign_in_label' => 'Log in',
+            'sign_in_label' => 'Se connecter',
 
 
             // whether to enable or not the "forgot password?" link (default: false)
@@ -59,7 +58,7 @@ class SecurityController extends AbstractController
             // 'forgot_password_path' => $this->generateUrl('...', ['...' => '...']),
 
             // the label displayed for the "forgot password?" link (the |trans filter is applied to it)
-            'forgot_password_label' => 'Forgot your password?',
+            'forgot_password_label' => 'Mot de passe oublié ?',
 
             // whether to enable or not the "remember me" checkbox (default: false)
             'remember_me_enabled' => true,
@@ -71,7 +70,16 @@ class SecurityController extends AbstractController
             'remember_me_checked' => true,
 
             // the label displayed for the remember me checkbox (the |trans filter is applied to it)
-            'remember_me_label' => 'Remember me',
+            'remember_me_label' => 'Se souvenir de moi ?',
         ]);
+    }
+
+    /**
+     * @Route("/logout", name="app_logout")
+     * @throws \RuntimeException
+     */
+    public function logoutAction()
+    {
+        throw new \RuntimeException('This should never be called directly.');
     }
 }

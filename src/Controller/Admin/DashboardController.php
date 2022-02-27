@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\ProjectImage;
+use App\Controller\Admin\ProjectCrudController;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -11,31 +11,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+
 use App\Entity\Project;
 
+/**
+ * @IsGranted("ROLE_ADMIN")
+ */
 class DashboardController extends AbstractDashboardController
 {
     // #[IsGranted("ROLE_ADMIN")]
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        return $this->render('admin/index.html.twig');
-
-        // Option 1. You can make your dashboard redirect to some common page of your backend
-        //
-        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
-
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
-        //
-        // if ('jane' === $this->getUser()->getUsername()) {
-        //     return $this->redirect('...');
-        // }
-
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //
-        // return $this->render('some/path/my-dashboard.html.twig');
+        $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
+        return $this->redirect($adminUrlGenerator->setController(ProjectCrudController::class)->generateUrl());
     }
 
     public function configureDashboard(): Dashboard
@@ -44,22 +34,17 @@ class DashboardController extends AbstractDashboardController
             ->setTranslationDomain('admin')
             ->setTitle('Armelle Richard–Hue Architecte');
     }
-    
 
     public function configureMenuItems(): iterable
     {
-        // return [
-        //     MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
-        //     MenuItem::linkToCrud('Projets', 'fa fa-tags', Project::class),
-        // ];
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        // yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Projets', 'fas fa-list', Project::class);
-        yield MenuItem::linkToCrud('ProjectImage', 'fas fa-list', ProjectImage::class);
+        // yield MenuItem::linkToCrud('ProjectImage', 'fas fa-list', ProjectImage::class);
 
         yield MenuItem::section();
-        yield MenuItem::linkToUrl('Accéder au site', null, '/');
+        yield MenuItem::linkToUrl('Accéder au site', "fa fa-anchor", '/');
         yield MenuItem::section();
         // yield MenuItem::linkToExitImpersonation('Stop impersonation', 'fa fa-exit');
-        // yield MenuItem::linkToLogout('Logout', 'fa fa-exit');
+        yield MenuItem::linkToLogout('Déconnexion', 'fa fa-running');
     }
 }
