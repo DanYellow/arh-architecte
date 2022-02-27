@@ -50,7 +50,6 @@ class SecurityController extends AbstractController
             // the label displayed for the Sign In form button (the |trans filter is applied to it)
             'sign_in_label' => 'Se connecter',
 
-
             // whether to enable or not the "forgot password?" link (default: false)
             'forgot_password_enabled' => true,
 

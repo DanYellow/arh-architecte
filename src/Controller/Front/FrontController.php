@@ -14,7 +14,7 @@ class FrontController extends AbstractController
      */
     public function index(ProjectRepository $projectRepository, int $page = 1)
     {
-        dd($projectRepository->findAll());
+        // dd($projectRepository->findAll());
         return $this->render('front/index.html.twig', [
             "list_projects" => $projectRepository->findAll()
         ]);
@@ -23,7 +23,17 @@ class FrontController extends AbstractController
     /**
      * @Route("/a-propos", name="a_propos")
      */
-    public function a_propos()
+    public function about()
+    {
+        return $this->render('front/a-propos.html.twig', [
+            "list_projects" => ["", "", ""]
+        ]);
+    }
+
+    /**
+     * @Route("/projet/{id}", name="project")
+     */
+    public function a_project()
     {
         return $this->render('front/a-propos.html.twig', [
             "list_projects" => ["", "", ""]

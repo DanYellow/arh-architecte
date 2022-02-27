@@ -8,7 +8,7 @@ block css_page %}
 <ul class="list-projects">
   {% for project in list_projects %}
   <li class="project-container">
-    <article class="project">{{ dump(project.projectImages)}}
+    <article class="project">
       <a href="project.php/{{ project.id }}" title="Voir projet {{ project.name }}">
         <figure>
           <!-- <img src="ressources/" alt="" loading="lazy" /> -->

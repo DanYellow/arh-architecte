@@ -45,9 +45,12 @@ class ProjectCrudController extends AbstractCrudController
 
         $slugger = new AsciiSlugger();
 
+        dd("rrr");
+
         $list_images = $entityInstance->getProjectImages();
         if (count($list_images) === 0) {
             $entityInstance->setIsOnline(false);
+            $entityInstance->setInBiography(false);
         } else {
             foreach ($list_images as $index => $value) {
                 dd($value);
@@ -61,6 +64,19 @@ class ProjectCrudController extends AbstractCrudController
 
                 // move_uploaded_file($file, "uploads/projects/{$newFilename}");
             }
+        }
+
+        parent::persistEntity($em, $entityInstance);
+    }
+
+    public function updateEntity(EntityManagerInterface $em, $entityInstance): void
+    {
+        if (!$entityInstance instanceof Project) return;
+
+        $list_images = $entityInstance->getProjectImages();
+        if (count($list_images) === 0) {
+            $entityInstance->setIsOnline(false);
+            $entityInstance->setInBiography(false);
         }
 
         parent::persistEntity($em, $entityInstance);
@@ -82,7 +98,7 @@ class ProjectCrudController extends AbstractCrudController
             ->setPageTitle('new', "Nouveau projet")
             ->setPageTitle('edit', fn (Project $category) => sprintf('Modifier <b>%s</b>', $category->getName()));
 
-            // ->setPageTitle('edit', "Modifier %entity_is_online%");
+        // ->setPageTitle('edit', "Modifier %entity_is_online%");
     }
 
     public function configureFields(string $pageName): iterable
@@ -101,6 +117,10 @@ class ProjectCrudController extends AbstractCrudController
 
         yield BooleanField::new('is_online', "Mettre en ligne")->renderAsSwitch(false)->onlyOnForms();
         yield BooleanField::new('is_online', "Est en ligne")->renderAsSwitch(false)->hideOnForm();
+        yield BooleanField::new('is_online', "Est en ligne")
+            ->renderAsSwitch(true)
+            ->hideOnForm()
+            ->setFormTypeOptions(['disabled' => 'disabled', 'title' => "Ne sera pas pris en compte s'il n'a pas d'images"]);
 
         yield BooleanField::new('in_biography', "Afficher dans la biographie")
             ->renderAsSwitch(false)->onlyOnForms();

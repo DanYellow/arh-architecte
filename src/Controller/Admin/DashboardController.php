@@ -20,7 +20,6 @@ use App\Entity\Project;
  */
 class DashboardController extends AbstractDashboardController
 {
-    // #[IsGranted("ROLE_ADMIN")]
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
@@ -37,14 +36,12 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        // yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Projets', 'fas fa-list', Project::class);
         // yield MenuItem::linkToCrud('ProjectImage', 'fas fa-list', ProjectImage::class);
 
         yield MenuItem::section();
         yield MenuItem::linkToUrl('Accéder au site', "fa fa-anchor", '/');
         yield MenuItem::section();
-        // yield MenuItem::linkToExitImpersonation('Stop impersonation', 'fa fa-exit');
         yield MenuItem::linkToLogout('Déconnexion', 'fa fa-running');
     }
 }
