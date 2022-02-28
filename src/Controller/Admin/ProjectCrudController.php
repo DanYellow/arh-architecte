@@ -16,9 +16,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+
+// use App\Admin\Field\UploadField;
 
 
 use Symfony\Component\HttpFoundation\File\File;
@@ -43,17 +45,43 @@ class ProjectCrudController extends AbstractCrudController
     {
         if (!$entityInstance instanceof Project) return;
 
-        $slugger = new AsciiSlugger();
+        $list_images = $entityInstance->getProjectImages();
+        if (count($list_images) === 0) {
+            $entityInstance->setIsOnline(false);
+            $entityInstance->setInBiography(false);
+        } else {
+            $slugger = new AsciiSlugger();
+            foreach ($list_images as $index => $value) {
 
-        dd("rrr");
+                $filecache = $value->getName();
+                $file = new File($filecache);
+
+                dd($file->getPath());
+
+                // $newFilename = "{$slugger->slug(strtolower($entityInstance->getName()))}-image-{$index}.{$file->guessExtension()}";
+                // // dd($newFilename);
+                // $value->setName($newFilename);
+                // $value->setPosition($index);
+
+                // move_uploaded_file($file, "uploads/projects/{$newFilename}");
+            }
+        }
+
+        // parent::persistEntity($em, $entityInstance);
+    }
+
+    public function updateEntity(EntityManagerInterface $em, $entityInstance): void
+    {
+        if (!$entityInstance instanceof Project) return;
 
         $list_images = $entityInstance->getProjectImages();
         if (count($list_images) === 0) {
             $entityInstance->setIsOnline(false);
             $entityInstance->setInBiography(false);
         } else {
+            $slugger = new AsciiSlugger();
             foreach ($list_images as $index => $value) {
-                dd($value);
+                dd($value->getData());
                 // $filecache = $value->getName();
                 // $file = new File($filecache);
 
@@ -66,20 +94,7 @@ class ProjectCrudController extends AbstractCrudController
             }
         }
 
-        parent::persistEntity($em, $entityInstance);
-    }
-
-    public function updateEntity(EntityManagerInterface $em, $entityInstance): void
-    {
-        if (!$entityInstance instanceof Project) return;
-
-        $list_images = $entityInstance->getProjectImages();
-        if (count($list_images) === 0) {
-            $entityInstance->setIsOnline(false);
-            $entityInstance->setInBiography(false);
-        }
-
-        parent::persistEntity($em, $entityInstance);
+        // parent::persistEntity($em, $entityInstance);
     }
 
     // function updateEntity(EntityManagerInterface $entityManager, $entityInstance)
@@ -96,8 +111,10 @@ class ProjectCrudController extends AbstractCrudController
 
             // you can pass a PHP closure as the value of the title
             ->setPageTitle('new', "Nouveau projet")
-            ->setPageTitle('edit', fn (Project $category) => sprintf('Modifier <b>%s</b>', $category->getName()));
-
+            ->setPageTitle('edit', fn (Project $category) => sprintf('Modifier <b>%s</b>', $category->getName()))
+            // ->addFormTheme('foo.html.twig')
+            // ->overrideTemplate('label/null', 'admin/labels/my_null_label.html.twig')
+        ;
         // ->setPageTitle('edit', "Modifier %entity_is_online%");
     }
 
@@ -129,7 +146,10 @@ class ProjectCrudController extends AbstractCrudController
 
         yield ChoiceField::new('year', "Année")
             ->setChoices((array) $list_years);
-        yield CollectionField::new('projectImages', 'Photos')
-            ->setEntryType(ProjectImageType::class)->renderExpanded()->onlyOnForms();
+        yield AssociationField::new('projectImages', "Photographies");
+        // yield UploadField::new('projectImages', 'Photos')
+        //     // ->setEntryType(ProjectImageType::class)
+        //     // ->renderExpanded()
+        //     ->onlyOnForms();
     }
 }

@@ -17,7 +17,7 @@ class ProjectImageType extends AbstractType
     {
         $builder->add('name', FileType::class, [
             'label' => 'Image',
-            'mapped' => true,
+            'mapped' => false,
             'required' => false,
             'constraints' => [
                 new File([
@@ -29,16 +29,20 @@ class ProjectImageType extends AbstractType
                     // 'mimeTypesMessage' => 'Please upload a valid PDF document',
                 ])
             ],
-            'data_class' => null
+            // 'data_class' => null
         ]);
         
         // $builder->get('name')
         //     ->addModelTransformer(new CallbackTransformer(
         //         function ($tagsAsArray) {
+                    
         //             // transform the array to a string
-        //             return new ProjectImage();
+        //             // return new ProjectImage();
+        //             return null;
         //         },
         //         function ($tagsAsString) {
+        //             dd($tagsAsString);
+        //             // return null;
         //             return new ProjectImage();
         //         }
         //     ))
