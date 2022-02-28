@@ -20,7 +20,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-// use App\Admin\Field\UploadField;
+use App\Admin\Field\UploadField;
 
 
 use Symfony\Component\HttpFoundation\File\File;
@@ -112,8 +112,7 @@ class ProjectCrudController extends AbstractCrudController
             // you can pass a PHP closure as the value of the title
             ->setPageTitle('new', "Nouveau projet")
             ->setPageTitle('edit', fn (Project $category) => sprintf('Modifier <b>%s</b>', $category->getName()))
-            // ->addFormTheme('foo.html.twig')
-            // ->overrideTemplate('label/null', 'admin/labels/my_null_label.html.twig')
+            ->addFormTheme('foo.html.twig')
         ;
         // ->setPageTitle('edit', "Modifier %entity_is_online%");
     }
@@ -132,7 +131,9 @@ class ProjectCrudController extends AbstractCrudController
         yield Field::new('name', "Nom");
         yield DateTimeField::new('created_at', 'Crée le')->hideOnForm();
 
-        yield BooleanField::new('is_online', "Mettre en ligne")->renderAsSwitch(false)->onlyOnForms();
+        yield BooleanField::new('is_online', "Mettre en ligne")
+            ->renderAsSwitch(false)->onlyOnForms()
+            ->setHelp("Ne sera pas mis en ligne en absence d'images");
         yield BooleanField::new('is_online', "Est en ligne")->renderAsSwitch(false)->hideOnForm();
         yield BooleanField::new('is_online', "Est en ligne")
             ->renderAsSwitch(true)
@@ -140,16 +141,27 @@ class ProjectCrudController extends AbstractCrudController
             ->setFormTypeOptions(['disabled' => 'disabled', 'title' => "Ne sera pas pris en compte s'il n'a pas d'images"]);
 
         yield BooleanField::new('in_biography', "Afficher dans la biographie")
-            ->renderAsSwitch(false)->onlyOnForms();
+            ->renderAsSwitch(false)
+            ->onlyOnForms()
+            ->setHelp("Ne sera pas mis en ligne en absence d'images");
         yield BooleanField::new('in_biography', "Affiché dans la biographie")
-            ->renderAsSwitch(false)->hideOnForm();
+            ->renderAsSwitch(false)
+            ->hideOnForm();
 
         yield ChoiceField::new('year', "Année")
             ->setChoices((array) $list_years);
-        yield AssociationField::new('projectImages', "Photographies");
-        // yield UploadField::new('projectImages', 'Photos')
+        yield CollectionField::new('projectImages', 'Offres')
+            ->setEntryType(ProjectImageType::class)
+            ->renderExpanded()
+            ->onlyOnForms()
+            ->setEntryIsComplex(false);
+            // yield AssociationField::new('projectImages', "Photographies");
+            // yield UploadField::new('projectImages', 'Photos')
+        ;
         //     // ->setEntryType(ProjectImageType::class)
         //     // ->renderExpanded()
         //     ->onlyOnForms();
     }
+
+    
 }

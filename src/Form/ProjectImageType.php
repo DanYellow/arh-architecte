@@ -31,11 +31,11 @@ class ProjectImageType extends AbstractType
             ],
             // 'data_class' => null
         ]);
-        
+
         // $builder->get('name')
         //     ->addModelTransformer(new CallbackTransformer(
         //         function ($tagsAsArray) {
-                    
+
         //             // transform the array to a string
         //             // return new ProjectImage();
         //             return null;
@@ -54,5 +54,11 @@ class ProjectImageType extends AbstractType
         $resolver->setDefaults([
             'data_class' => ProjectImage::class,
         ]);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        // This name represents the form block name "address_form_(row|widget|...)"
+        return 'project_image_form';
     }
 }
