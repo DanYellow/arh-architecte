@@ -4,7 +4,7 @@
   <a href="index.php">
     <section class="texts-container">
       <figure>
-        <img src="ressources/images/logo-bw.png"
+        <img src="{{ asset('ressources/images/logo-bw.png') }}"
           alt="Logo Armelle Richard Architecte dplg" />
       </figure>
       <article class="texts">
@@ -21,7 +21,7 @@
     <ul class="navigation-content">
       <li class="navigation-item">
         <a href="{{ path('index') }}" 
-             {% if route_name == "index" %} class="active" aria-current="page" {% endif %}>
+             {% if route_name == "index" or route_name == "project" %} class="active" aria-current="page" {% endif %}>
           projets
         </a>
       </li>

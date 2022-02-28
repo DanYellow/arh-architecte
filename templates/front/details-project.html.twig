@@ -1,0 +1,16 @@
+{% extends 'front/base.html.twig' %}
+{% block title %}
+  Projets
+{% endblock %} {% block css_page %}
+  <link rel="stylesheet"
+    href="{{ asset('ressources/css/project.css') }}" />
+{% endblock %}
+
+{% block main %}
+  <p class="side-title-project">
+    {{ project.name }}
+  </p>
+  <p class="title-project">
+    {{ project.name }}
+  </p>
+{% endblock %}

@@ -9,7 +9,7 @@ block css_page %}
   {% for project in list_projects %}
   <li class="project-container">
     <article class="project">
-      <a href="project.php/{{ project.id }}" title="Voir projet {{ project.name }}">
+      <a href="{{ path('project', {'id': project.id }) }}" title="Voir projet {{ project.name }}">
         <figure>
           <!-- <img src="ressources/" alt="" loading="lazy" /> -->
           <article class="icon-container">
