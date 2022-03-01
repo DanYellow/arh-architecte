@@ -19,7 +19,7 @@ class ProjectImageType extends AbstractType
     {
         $builder->add('name', FileType::class, [
             'label' => 'Image',
-            'mapped' => true,
+            'mapped' => false,
             'required' => false,
             'constraints' => [
                 new File([
@@ -31,36 +31,42 @@ class ProjectImageType extends AbstractType
                     // 'mimeTypesMessage' => 'Please upload a valid PDF document',
                 ])
             ],
-            'data_class' => ProjectImage::class,
+            // 'data_class' => null,
         ]);
+
+        // $builder->get('name')
+        //     ->addModelTransformer(new CallbackTransformer(
+        //         function ($img) {
+        //             return null;
+        //         },
+        //         function ($img) {
+        //             // dd($img);
+        //             return "";
+        //         }
+        //     ))
+        // ;
 
         $builder->add('position', NumberType::class, [
             'mapped' => true,
             'required' => false,
         ]);
-
-        // $builder->get('name')
-        //     ->addModelTransformer(new CallbackTransformer(
-        //         function ($tagsAsArray) {
-        //             // dd($tagsAsArray);
-        //             // transform the array to a string
-        //             // return new ProjectImage();
-        //             return "nfffull";
-        //         },
-        //         function ($tagsAsString) {
-        //             dd($tagsAsString);
-        //             // return null;
-        //             return new ProjectImage();
-        //         }
-        //     ))
-        // ;
+        $builder->get('position')
+            ->addModelTransformer(new CallbackTransformer(
+                function () {
+                    return null;
+                },
+                function ($position) {
+                    return (int) $position;
+                }
+            ))
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => ProjectImage::class,
-            "allow_extra_fields" => false
+            "allow_extra_fields" => true
         ]);
     }
 

@@ -64,6 +64,13 @@ class ProjectImage
         return $this;
     }
 
+    public function removeUpload(string $folder)
+    {
+        if (isset($this->name)) {
+            unlink("{$folder}/{$this->name}");
+        }
+    }
+
     // public function __toString()
     // {
     //     return $this->name;
