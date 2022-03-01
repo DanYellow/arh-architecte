@@ -1,0 +1,46 @@
+{% block project_image_form_row %}
+    {# <ol>
+            {% for key, value in _context  %}
+                <li>{{dump(key, value)}}</li>
+            {% endfor %}
+        </ol> #}
+
+    {# {{ form_row(form.name, {'label': 'foo'}) }} #}
+    {# {{dump(value.getName())}} #}
+
+    {% set img_path = value.getName()|default('') %}
+    {% set position = value.getPosition()|default(name) %}
+    {% set id_num = id|split("_") %}
+        <div class="field-collection-item"> 
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id }}-contents">
+                    <i class="fas fw fa-chevron-right form-collection-item-collapse-marker"></i>
+                    {{ 'Image ' ~ name }}
+                </button>
+            </h2>
+            <div id="{{ id }}-contents" class="accordion-collapse collaps">
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col">
+                            <input type="file" accept="{{attr.mimeTypes|join(',')}}" class="form-control" name="{{ full_name ~ '[name]' }}" onchange="{{ 'document.querySelector(' ~ '\'[data-img=' ~ '"' ~ id ~ '"]\').src = window.URL.createObjectURL(this.files[0])' }}"/>
+                        </div>
+                        <div class="col">
+                            <img src="{{ asset("uploads/projects/" ~ img_path) }}" alt="" data-img="{{ id }}" width="150" accept=""/>
+                            <input type="text" value="{{ position }}" name="{{ full_name ~ '[position]' }}" data-input-position="{{name}}" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{# {% block project_image_form_label %}
+  feeeeee
+{% endblock %} #}
+{% block project_image_form_widget %}
+    widget
+{% endblock %}
+
+{# https://github.com/EasyCorp/EasyAdminBundle/issues/4494 #}

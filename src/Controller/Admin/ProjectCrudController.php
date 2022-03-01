@@ -20,7 +20,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-use App\Admin\Field\UploadField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 
 
 use Symfony\Component\HttpFoundation\File\File;
@@ -80,30 +80,23 @@ class ProjectCrudController extends AbstractCrudController
 
         $files = parent::getContext()->getRequest()->files;
         $list_images_uploaded = $files->get('Project')['projectImages'];
-        // dd($list_images_uploaded, $list_project_images);
-
-        // dd($list_project_images);
+       
         if (count($list_images_uploaded) === 0) {
             $entityInstance->setIsOnline(false);
             $entityInstance->setInBiography(false);
         } else {
             $slugger = new AsciiSlugger();
 
-            // $iterator = new \MultipleIterator();
-            // $iterator->attachIterator(new \ArrayIterator($list_images_uploaded));
-            // $iterator->attachIterator(new \ArrayIterator($list_project_images));
-            // dd($iterator);
-            // foreach ($iterator as $item) {
-            //     dd($item);
-            // }
-
             foreach ($list_project_images as $index => $value) {
                 $file = $list_images_uploaded[$index]["name"];
 
-                if (is_null($file)) {
+                if (is_null($file)) {                    
+                    if(is_null($value->getName())) {
+                        $entityInstance->removeProjectImage($value);
+                    }
+                    continue;
                 } else {
                     $oldFileName = $value->getName();
-                    // $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                     $uniqueid = uniqid();
                     $newFilename = "{$slugger->slug(strtolower($entityInstance->getName()))}-{$uniqueid}.{$file->guessExtension()}";
                     if(!is_null($oldFileName)) {
@@ -121,40 +114,11 @@ class ProjectCrudController extends AbstractCrudController
                         $newFilename
                     );
                 }
-                // dd($originalFilename);
-                // dd($list_images_uploaded[$index]["name"], $value->getName());
             }
-            //     // dd($value->getData());
-            //     $filecache = $value->getName();
-
-            //     // $position = $value->getPosition();
-            //     // $value->setPosition($position);
-
-
-            //     if ($filecache === "") {
-            //         $id = $value->getId();
-            //         $qb = $em->createQueryBuilder();
-            //         $qb->select('pi.name')->from('App\Entity\ProjectImage', 'pi')->where('pi.id = :id')->setParameter("id", $id);
-
-            //         $img_old_name = $qb->getQuery()->getOneOrNullResult()["name"];
-            //         $value->setName($img_old_name);
-            //     }
-
-            //     $file = new File($filecache);
-
-            //     $newFilename = "{$slugger->slug(strtolower($entityInstance->getName()))}-image-{$index}.{$file->guessExtension()}";
-            //     $value->setName($newFilename);
-            //     $value->setPosition($index);
-
-            //     move_uploaded_file($file, "uploads/projects/{$newFilename}");
-            // }
         }
-
-
+        
         parent::persistEntity($em, $entityInstance);
     }
-
-    // function updateEntity(EntityManagerInterface $entityManager, $entityInstance)
 
     public function configureCrud(Crud $crud): Crud
     {
@@ -169,7 +133,7 @@ class ProjectCrudController extends AbstractCrudController
             // you can pass a PHP closure as the value of the title
             ->setPageTitle('new', "Nouveau projet")
             ->setPageTitle('edit', fn (Project $category) => sprintf('Modifier <b>%s</b>', $category->getName()))
-            ->addFormTheme('foo.html.twig');
+            ->addFormTheme('admin/field/project-image.html.twig');
         // ->setPageTitle('edit', "Modifier %entity_is_online%");
     }
 
@@ -210,11 +174,13 @@ class ProjectCrudController extends AbstractCrudController
             ->setEntryType(ProjectImageType::class)
             ->renderExpanded()
             ->onlyOnForms();
-            // yield AssociationField::new('projectImages', "Photographies");
-            // yield UploadField::new('projectImages', 'Photos')
+    }
+
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js')
+        ->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')
+        ->addJsFile('ressources/js/reorder-project-images.js')
         ;
-        //     // ->setEntryType(ProjectImageType::class)
-        //     // ->renderExpanded()
-        //     ->onlyOnForms();
     }
 }
