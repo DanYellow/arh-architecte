@@ -46,6 +46,8 @@ class ProjectCrudController extends AbstractCrudController
         if (!$entityInstance instanceof Project) return;
 
         $list_images = $entityInstance->getProjectImages();
+        dd($entityInstance,  $list_images);
+        return;
         if (count($list_images) === 0) {
             $entityInstance->setIsOnline(false);
             $entityInstance->setInBiography(false);
@@ -73,6 +75,8 @@ class ProjectCrudController extends AbstractCrudController
     public function updateEntity(EntityManagerInterface $em, $entityInstance): void
     {
         if (!$entityInstance instanceof Project) return;
+        dd($entityInstance);
+        return;
 
         $list_images = $entityInstance->getProjectImages();
         if (count($list_images) === 0) {
@@ -81,7 +85,7 @@ class ProjectCrudController extends AbstractCrudController
         } else {
             $slugger = new AsciiSlugger();
             foreach ($list_images as $index => $value) {
-                dd($value->getData());
+                // dd($value->getData());
                 // $filecache = $value->getName();
                 // $file = new File($filecache);
 
@@ -153,8 +157,7 @@ class ProjectCrudController extends AbstractCrudController
         yield CollectionField::new('projectImages', 'Offres')
             ->setEntryType(ProjectImageType::class)
             ->renderExpanded()
-            ->onlyOnForms()
-            ->setEntryIsComplex(false);
+            ->onlyOnForms();
             // yield AssociationField::new('projectImages', "Photographies");
             // yield UploadField::new('projectImages', 'Photos')
         ;

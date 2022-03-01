@@ -1,0 +1,81 @@
+{% block project_image_form_row %}
+  {# <ol>
+    {% for key, value in _context  %}
+      <li>{{dump(key, value)}}</li>
+    {% endfor %}
+</ol> #}
+
+{# {{ form_row(form.name, {'label': 'foo'}) }} #}
+{# {{dump(value.getName())}} #}
+{{ dump(full_name) }}
+
+{% set img_path = value.getName()|default('passed var is empty') %}
+{# <ol>
+    {% for key, value in _context  %}
+      <li>{{dump(value, key)}}</li>
+    {% endfor %}
+</ol>  #}
+
+  
+  <div class="field-collection-item">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#{{ id }}-contents">
+          <i class="fas fw fa-chevron-right form-collection-item-collapse-marker">
+
+          </i>
+          {{ value|ea_as_string }}
+        </button>
+      </h2>
+      <div id="{{ id }}-contents" class="accordion-collapse collaps">
+        <div class="accordion-body">
+          <div class="row">
+            <div class="col">
+              <input type="file"
+                class="form-control"
+                name="{{ full_name ~ '[name]' }}"
+                onchange="{{ 'document.querySelector(' ~ '\'[data-img=' ~ '"' ~ id ~ '"]\').src = window.URL.createObjectURL(this.files[0])' }}" 
+                />
+            </div>
+            <div class="col">
+              <img src="{{ asset("uploads/projects/" ~ img_path) }}" alt="" data-img="{{ id }}" width="150" />
+              <input type="text" name="{{ full_name ~ '[position]' }}" class="form-control">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll("[data-input-file]").forEach((selector) => {
+        selector.addEventListener('change', (e) => {
+
+            const idInput = e.target.dataset.inputFile;
+            const valInput = e.target.value;
+
+            var reader = new FileReader();
+
+        reader.onload = function (evt) {
+            document.querySelector(`[data-img="${idInput}"]`).src = evt.target.result
+        //    $('#img').attr('src', e.target.result);
+        }
+       reader.readAsDataURL(e.target.files[0]);
+    
+            // document.querySelector(`[data-img="${idInput}"]`).src=valInput
+        })
+    })
+  </script>
+{% endblock %}
+
+{# {% block project_image_form_label %}
+  feeeeee
+{% endblock %} #}
+{# {% block project_image_form_widget %}
+fefefefe
+{% endblock %} #}
+
+{# https://github.com/EasyCorp/EasyAdminBundle/issues/4494 #}

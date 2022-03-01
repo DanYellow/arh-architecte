@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\ProjectImage;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
@@ -17,7 +19,7 @@ class ProjectImageType extends AbstractType
     {
         $builder->add('name', FileType::class, [
             'label' => 'Image',
-            'mapped' => false,
+            'mapped' => true,
             'required' => false,
             'constraints' => [
                 new File([
@@ -29,16 +31,21 @@ class ProjectImageType extends AbstractType
                     // 'mimeTypesMessage' => 'Please upload a valid PDF document',
                 ])
             ],
-            // 'data_class' => null
+            'data_class' => ProjectImage::class,
+        ]);
+
+        $builder->add('position', NumberType::class, [
+            'mapped' => true,
+            'required' => false,
         ]);
 
         // $builder->get('name')
         //     ->addModelTransformer(new CallbackTransformer(
         //         function ($tagsAsArray) {
-
+        //             // dd($tagsAsArray);
         //             // transform the array to a string
         //             // return new ProjectImage();
-        //             return null;
+        //             return "nfffull";
         //         },
         //         function ($tagsAsString) {
         //             dd($tagsAsString);
@@ -53,6 +60,7 @@ class ProjectImageType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ProjectImage::class,
+            "allow_extra_fields" => false
         ]);
     }
 
