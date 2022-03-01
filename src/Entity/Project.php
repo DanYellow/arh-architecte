@@ -34,6 +34,7 @@ class Project
     private $year;
 
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: ProjectImage::class, cascade: ["persist", "remove"])]
+    // #[ORM\OrderBy(position: "ASC")]
     private $projectImages;
 
     public function __construct()

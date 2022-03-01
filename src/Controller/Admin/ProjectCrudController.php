@@ -17,14 +17,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use Symfony\Component\String\Slugger\AsciiSlugger;
-
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 
-
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\HttpFoundation\File\File;
 
+use App\Service\FileUploader;
 
 class ProjectCrudController extends AbstractCrudController
 {
@@ -80,7 +78,11 @@ class ProjectCrudController extends AbstractCrudController
 
         $files = parent::getContext()->getRequest()->files;
         $list_images_uploaded = $files->get('Project')['projectImages'];
-       
+
+        $request = parent::getContext()->getRequest()->request;
+
+        $listImageToDelete = $request->all('Project')["projectImages"];
+
         if (count($list_images_uploaded) === 0) {
             $entityInstance->setIsOnline(false);
             $entityInstance->setInBiography(false);
@@ -89,17 +91,24 @@ class ProjectCrudController extends AbstractCrudController
 
             foreach ($list_project_images as $index => $value) {
                 $file = $list_images_uploaded[$index]["name"];
+                $hasToBeDeleted = false;
+                if (array_key_exists('delete', $listImageToDelete[$index])) {
+                    $hasToBeDeleted = $listImageToDelete[$index]["delete"] == "on";
+                }
 
-                if (is_null($file)) {                    
-                    if(is_null($value->getName())) {
+                if (is_null($file)) {
+                    if (is_null($value->getName()) ) {
                         $entityInstance->removeProjectImage($value);
                     }
-                    continue;
+                else if($hasToBeDeleted == true) {
+                    $qb = $em->createQueryBuilder()->delete("App\Entity\ProjectImage", "pi")->where('pi.id = :id')->setParameter("id", $value->getId())->getQuery();
+                    $qb->execute();
+                }
                 } else {
                     $oldFileName = $value->getName();
                     $uniqueid = uniqid();
                     $newFilename = "{$slugger->slug(strtolower($entityInstance->getName()))}-{$uniqueid}.{$file->guessExtension()}";
-                    if(!is_null($oldFileName)) {
+                    if (!is_null($oldFileName)) {
                         $oldName = explode(".", $oldFileName);
                         $oldName = array_slice($oldName, 0, -1);
                         $newFilename = implode("", $oldName);
@@ -116,7 +125,7 @@ class ProjectCrudController extends AbstractCrudController
                 }
             }
         }
-        
+
         parent::persistEntity($em, $entityInstance);
     }
 
@@ -129,7 +138,7 @@ class ProjectCrudController extends AbstractCrudController
             //   %entity_id%, %entity_short_id%
             //   %entity_label_singular%, %entity_label_plural%
             ->setPageTitle('index', 'Liste projets')
-
+            ->setEntityLabelInSingular('Projet')
             // you can pass a PHP closure as the value of the title
             ->setPageTitle('new', "Nouveau projet")
             ->setPageTitle('edit', fn (Project $category) => sprintf('Modifier <b>%s</b>', $category->getName()))
@@ -160,17 +169,16 @@ class ProjectCrudController extends AbstractCrudController
             ->hideOnForm()
             ->setFormTypeOptions(['disabled' => 'disabled', 'title' => "Ne sera pas pris en compte s'il n'a pas d'images"]);
 
-        yield BooleanField::new('in_biography', "Afficher dans la biographie")
+        yield BooleanField::new('in_biography', "Afficher la première image dans la biographie")
             ->renderAsSwitch(false)
-            ->onlyOnForms()
-            ->setHelp("Ne sera pas mis en ligne en absence d'images");
+            ->onlyOnForms();
         yield BooleanField::new('in_biography', "Affiché dans la biographie")
             ->renderAsSwitch(false)
             ->hideOnForm();
 
         yield ChoiceField::new('year', "Année")
             ->setChoices((array) $list_years);
-        yield CollectionField::new('projectImages', 'Offres')
+        yield CollectionField::new('projectImages', 'Images associées')
             ->setEntryType(ProjectImageType::class)
             ->renderExpanded()
             ->onlyOnForms();
@@ -179,8 +187,7 @@ class ProjectCrudController extends AbstractCrudController
     public function configureAssets(Assets $assets): Assets
     {
         return $assets->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js')
-        ->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')
-        ->addJsFile('ressources/js/reorder-project-images.js')
-        ;
+            ->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')
+            ->addJsFile('ressources/js/reorder-project-images.js');
     }
 }

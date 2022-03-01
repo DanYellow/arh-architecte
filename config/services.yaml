@@ -19,6 +19,10 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%projects_images_directory%'
 parameters:
     projects_images_directory: '%kernel.project_dir%/public/uploads/projects'
 

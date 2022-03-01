@@ -1,15 +1,26 @@
 $(function () {
-    $("#Project_projectImages").sortable({
-        axis: "y",
-        cursor: "move",
-        // handle: ".handle",
-        opacity: 0.5,
-        deactivate: function( event, ui ) {
-            // const newIndex = ui.item.index()
-            // ui.item.find('[data-input-position]').val(newIndex)
-            $('[data-input-position]').each((index, el) => {
-                $(el).val(index)
-            })
-        }
+    $projectImagesInputContainer = $("#Project_projectImages");
+
+    const initSortable = () => {
+        // $projectImagesInputContainer.sortable( "destroy" );
+        $projectImagesInputContainer.sortable({
+            axis: "y",
+            cursor: "move",
+            handle: ".handle",
+            opacity: 0.75,
+            deactivate: () => {
+                $('[data-input-position]').each((index, el) => {
+                    $(el).val(index)
+                })
+            },
+        })
+    }
+
+    initSortable()
+
+    $('.field-collection-add-button').on('click', () => {
+        initSortable()
+        $projectImagesInputContainer.sortable( "refreshPositions" )
+        $projectImagesInputContainer.sortable( "refresh" )
     })
 });

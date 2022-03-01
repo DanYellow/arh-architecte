@@ -6,6 +6,7 @@ use App\Entity\ProjectImage;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
@@ -35,7 +36,7 @@ class ProjectImageType extends AbstractType
                     'mimeTypesMessage' => 'Merci de bien vouloir uploader une image correcte',
                 ])
             ],
-            
+
             // 'data_class' => null,
         ]);
 
@@ -43,6 +44,7 @@ class ProjectImageType extends AbstractType
             'mapped' => true,
             'required' => false,
         ]);
+
         $builder->get('position')
             ->addModelTransformer(new CallbackTransformer(
                 function () {
@@ -51,8 +53,21 @@ class ProjectImageType extends AbstractType
                 function ($position) {
                     return (int) $position;
                 }
-            ))
-        ;
+            ));
+
+        $builder->add('delete', FileType::class, [
+            'mapped' => false,
+            'required' => false,
+        ]);
+        $builder->get('delete')
+            ->addModelTransformer(new CallbackTransformer(
+                function () {
+                    return null;
+                },
+                function ($isDeleted) {
+                    return $isDeleted;
+                }
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -60,7 +75,10 @@ class ProjectImageType extends AbstractType
         $resolver->setDefaults([
             'data_class' => ProjectImage::class,
             "allow_extra_fields" => true,
-            'attr' => ["mimeTypes" => ProjectImageType::MIME_TYPES]
+            'attr' => [
+                "mimeTypes" => ProjectImageType::MIME_TYPES,
+                'block_name' => 'media_proto'
+            ]
         ]);
     }
 

@@ -19,7 +19,7 @@ class ProjectImage
     #[ORM\Column(type: 'smallint')]
     private $position;
 
-    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'projectImages')]
+    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'projectImages', cascade: ["remove"])]
     #[ORM\JoinColumn(nullable: false)]
     private $project;
 
