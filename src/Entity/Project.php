@@ -111,12 +111,12 @@ class Project
 
     public function getYear(): ?int
     {
-        return (int) $this->year;
+        return $this->year;
     }
 
     public function setYear(int $year): self
     {
-        $this->year = (int) $year;
+        $this->year = $year;
 
         return $this;
     }

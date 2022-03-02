@@ -71,7 +71,7 @@ class ProjectCrudController extends AbstractCrudController
                     $hasToBeDeleted = $listImageToDelete[$index]["delete"] == "on";
                 }
 
-                if($hasToBeDeleted == true || is_null($file)) {
+                if ($hasToBeDeleted == true || is_null($file)) {
                     $entityInstance->removeProjectImage($value);
                 } else {
                     $uniqueid = uniqid();
@@ -95,21 +95,22 @@ class ProjectCrudController extends AbstractCrudController
 
         $list_project_images = $entityInstance->getProjectImages()->toArray();
 
-        $files = parent::getContext()->getRequest()->files;
-        $list_images_uploaded = array_values($files->get('Project')['projectImages']);
-        
-        $request = parent::getContext()->getRequest()->request;
-        $listImageToDelete = array_values($request->all('Project')["projectImages"]);
+
         // dd($list_project_images,  $listImageToDelete, $list_images_uploaded);
 
         // https://github.com/EasyCorp/EasyAdminBundle/issues/2662
         // https://stackoverflow.com/questions/34967795/order-of-symfony-form-collectiontype-field
 
 
-        if (count($list_images_uploaded) === 0) {
+        if (count($list_project_images) === 0) {
             $entityInstance->setIsOnline(false);
             $entityInstance->setInBiography(false);
         } else {
+            $files = parent::getContext()->getRequest()->files;
+            $list_images_uploaded = array_values($files->get('Project')['projectImages']);
+
+            $request = parent::getContext()->getRequest()->request;
+            $listImageToDelete = array_values($request->all('Project')["projectImages"]);
             $slugger = new AsciiSlugger();
             // dd($list_project_images);
             foreach ($list_project_images as $index => $value) {
@@ -130,7 +131,7 @@ class ProjectCrudController extends AbstractCrudController
                     } else if (is_null($value->getName())) {
                         $entityInstance->removeProjectImage($value);
                     }
-                } else if($hasToBeDeleted == true) {
+                } else if ($hasToBeDeleted == true) {
                     $entityInstance->removeProjectImage($value);
                 } else {
                     $oldFileName = $value->getName();
@@ -157,6 +158,20 @@ class ProjectCrudController extends AbstractCrudController
         parent::persistEntity($em, $entityInstance);
     }
 
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (!$entityInstance instanceof Project) return;
+
+        $list_project_images = $entityInstance->getProjectImages()->toArray();
+
+        foreach ($list_project_images as $index => $value) {
+            $value->removeUpload($this->getParameter('projects_images_directory'));
+        }
+        
+        parent::deleteEntity($entityManager, $entityInstance);
+    }
+
+
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -178,11 +193,14 @@ class ProjectCrudController extends AbstractCrudController
     {
         $current_year = date('Y');
         $list_years_raw = range($current_year + 2, 2010);
-        $list_years_raw["0000"] = -1;
         $list_years = new \stdClass();
         foreach ($list_years_raw as $key => $value) {
             $list_years->$value = $value;
         }
+        $list_years = (array) $list_years;
+        $list_years["0000"] = -1;
+
+        // dd($list_years);
 
         yield IdField::new('id')->hideOnForm()->hideOnDetail();
         yield Field::new('name', "Nom");
@@ -195,7 +213,7 @@ class ProjectCrudController extends AbstractCrudController
         yield BooleanField::new('is_online', "Mettre en ligne")
             ->renderAsSwitch(true)
             ->hideOnForm();
-            // ->setFormTypeOptions(['disabled' =>true, 'title' => "Ne sera pas pris en compte s'il n'a pas d'images"]);
+        // ->setFormTypeOptions(['disabled' =>true, 'title' => "Ne sera pas pris en compte s'il n'a pas d'images"]);
 
         yield BooleanField::new('in_biography', "Afficher la première image dans la biographie")
             ->renderAsSwitch(false)
@@ -205,9 +223,8 @@ class ProjectCrudController extends AbstractCrudController
             ->hideOnForm();
 
         yield ChoiceField::new('year', "Année")
-            ->setHelp("Choisir l'année -1 pour ne pas afficher de date")
-            ->setFormTypeOptions(['required' => false])
-            ->setChoices((array) $list_years);
+            ->setHelp("Choisir l'année 0000 pour ne pas afficher de date")
+            ->setChoices($list_years);
         yield CollectionField::new('projectImages', 'Images associées')
             ->setEntryType(ProjectImageType::class)
             ->renderExpanded()
