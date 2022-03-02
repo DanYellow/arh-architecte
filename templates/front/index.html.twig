@@ -5,13 +5,16 @@ block css_page %}
   href="{{ absolute_url('ressources/css/list-projects.css') }}"
 />
 {% endblock %} {% block main %}
+
 <ul class="list-projects">
   {% for project in list_projects %}
+  {% set first_image = project.projectImages|first %}
+
   <li class="project-container">
     <article class="project">
       <a href="{{ path('project', {'id': project.id }) }}" title="Voir projet {{ project.name }}">
         <figure>
-          <img src="{{ asset("uploads/projects/" ~ project.name)|imagine_filter('home_thumb') }}" alt="" loading="lazy" />
+          <img src="{{ asset("uploads/projects/" ~ first_image.name)|imagine_filter('home_thumb') }}" alt="" loading="lazy" />
           <article class="icon-container">
             <svg
               xmlns="http://www.w3.org/2000/svg"

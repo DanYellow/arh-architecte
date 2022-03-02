@@ -75,8 +75,8 @@ class ProjectCrudController extends AbstractCrudController
                     $entityInstance->removeProjectImage($value);
                 } else {
                     $uniqueid = uniqid();
-                    $newFilename = "{$slugger->slug(strtolower($entityInstance->getName()))}-{$uniqueid}.{$file->guessExtension()}";
-
+                    $newFilename = "{$slugger->slug($entityInstance->getName())}-{$uniqueid}.{$file->guessExtension()}";
+                    $newFilename = strtolower($newFilename);
                     $value->setName($newFilename);
                     $file->move(
                         $this->getParameter('projects_images_directory'),
@@ -136,11 +136,12 @@ class ProjectCrudController extends AbstractCrudController
                 } else {
                     $oldFileName = $value->getName();
                     $uniqueid = uniqid();
-                    $newFilename = "{$slugger->slug(strtolower($entityInstance->getName()))}-{$uniqueid}.{$file->guessExtension()}";
+                    $newFilename = "{$slugger->slug($entityInstance->getName())}-{$uniqueid}.{$file->guessExtension()}";
                     if (!is_null($oldFileName)) {
                         $oldName = explode(".", $oldFileName);
                         $oldName = array_slice($oldName, 0, -1);
                         $newFilename = implode("", $oldName);
+                        $newFilename = strtolower($newFilename);
                         $newFilename = "{$newFilename}.{$file->guessExtension()}";
 
                         $value->removeUpload($this->getParameter('projects_images_directory'));
