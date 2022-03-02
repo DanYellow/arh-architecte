@@ -25,13 +25,13 @@
 						</div>
 						<div class="col">
 							<input type="file" accept="{{attr.mimeTypes|join(',')}}" class="form-control" name="{{ full_name ~ '[name]' }}" onchange="{{ 'document.querySelector(' ~ '\'[data-img=' ~ '"' ~ id ~ '"]\').src = window.URL.createObjectURL(this.files[0])' }}"/>
-							<label>Supprimer
+							<label class="text-danger">Supprimer
 								<input type="checkbox" data-delete-image="{{name}}" name="{{ full_name ~ '[delete]' }}"/>
 							</label>
 						</div>
 						<div class="col">
 							<img src="{{ asset("uploads/projects/" ~ img_path) }}" alt="" data-img="{{ id }}" width="150" accept=""/>
-							<input type="hidden" value="{{ position }}" name="{{ full_name ~ '[position]' }}" data-input-position="{{name}}" class="form-control">
+							<input type="hidden" readonly value="{{ position }}" name="{{ full_name ~ '[position]' }}" data-input-position="{{name}}" class="form-control">
 						</div>
 					</div>
 				</div>

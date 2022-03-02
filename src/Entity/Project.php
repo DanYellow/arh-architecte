@@ -34,7 +34,6 @@ class Project
     private $year;
 
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: ProjectImage::class, cascade: ["persist", "remove"])]
-    // #[ORM\OrderBy(position: "ASC")]
     private $projectImages;
 
     public function __construct()
@@ -112,12 +111,12 @@ class Project
 
     public function getYear(): ?int
     {
-        return $this->year;
+        return (int) $this->year;
     }
 
     public function setYear(int $year): self
     {
-        $this->year = $year;
+        $this->year = (int) $year;
 
         return $this;
     }

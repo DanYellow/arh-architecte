@@ -1,6 +1,14 @@
 $(function () {
     $projectImagesInputContainer = $("#Project_projectImages");
 
+    const resetInputPosition = () => {
+        $('[data-input-position]').each((index, el) => {
+            $(el).val(index)
+        })
+    }
+
+    resetInputPosition()
+
     const initSortable = () => {
         // $projectImagesInputContainer.sortable( "destroy" );
         $projectImagesInputContainer.sortable({
@@ -9,9 +17,7 @@ $(function () {
             handle: ".handle",
             opacity: 0.75,
             deactivate: () => {
-                $('[data-input-position]').each((index, el) => {
-                    $(el).val(index)
-                })
+                resetInputPosition();
             },
         })
     }
@@ -19,8 +25,6 @@ $(function () {
     initSortable()
 
     $('.field-collection-add-button').on('click', () => {
-        initSortable()
-        $projectImagesInputContainer.sortable( "refreshPositions" )
-        $projectImagesInputContainer.sortable( "refresh" )
+        resetInputPosition();
     })
 });
