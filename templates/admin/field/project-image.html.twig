@@ -1,17 +1,15 @@
 {% block project_image_form_row %}
 	{# <ol>
-			            {% for key, value in _context  %}
-			                <li>{{dump(key, value)}}</li>
-			            {% endfor %}
-			        </ol> #}
-
-	{# {{ form_row(form.name, {'label': 'foo'}) }} #}
-	{# {{dump(value.getName())}} #}
+						            {% for key, value in _context  %}
+						                <li>{{dump(key, value)}}</li>
+						            {% endfor %}
+						        </ol> #}
 
 	{% set img_path = value.getName()|default('') %}
 	{% set position = value.getPosition()|default(name) %}
 	{% set id_num = id|split("_") %}
-    {# col-md-6 col-xxl-5 #}
+
+	{# col-md-6 col-xxl-5 #}
 		<div class="field-collection-item"> <div class="accordion-item">
 			<h2 class="accordion-header">
 				<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id }}-contents">
@@ -40,13 +38,6 @@
 			</div>
 		</div>
 	</div>
-{% endblock %}
-
-{# {% block project_image_form_label %}
-  feeeeee
-{% endblock %} #}
-{% block project_image_form_widget %}
-	widget
 {% endblock %}
 
 {# https://github.com/EasyCorp/EasyAdminBundle/issues/4494 #}

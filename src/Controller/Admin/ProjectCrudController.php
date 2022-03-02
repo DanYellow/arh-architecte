@@ -22,6 +22,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\HttpFoundation\File\File;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
+
 use App\Service\FileUploader;
 
 class ProjectCrudController extends AbstractCrudController
@@ -43,45 +46,32 @@ class ProjectCrudController extends AbstractCrudController
     {
         if (!$entityInstance instanceof Project) return;
 
-        $list_images = $entityInstance->getProjectImages();
-        // dd($entityInstance,  $list_images);
-        return;
-        if (count($list_images) === 0) {
-            $entityInstance->setIsOnline(false);
-            $entityInstance->setInBiography(false);
-        } else {
-            $slugger = new AsciiSlugger();
-            foreach ($list_images as $index => $value) {
+        $list_project_images = $entityInstance->getProjectImages();
 
-                $filecache = $value->getName();
-                $file = new File($filecache);
-
-                dd($file->getPath());
-
-                // $newFilename = "{$slugger->slug(strtolower($entityInstance->getName()))}-image-{$index}.{$file->guessExtension()}";
-                // // dd($newFilename);
-                // $value->setName($newFilename);
-                // $value->setPosition($index);
-
-                // move_uploaded_file($file, "uploads/projects/{$newFilename}");
-            }
-        }
-
-        // parent::persistEntity($em, $entityInstance);
+        parent::persistEntity($em, $entityInstance);
     }
 
     public function updateEntity(EntityManagerInterface $em, $entityInstance): void
     {
         if (!$entityInstance instanceof Project) return;
 
-        $list_project_images = $entityInstance->getProjectImages();
+        $list_project_images = $entityInstance->getProjectImages()->toArray();
+        // usort($list_project_images, function ($a, $b) {
+        //     return ($a->getPosition() > $b->getPosition()) ? 1 : -1;
+        // });
 
+        // dd($list_project_images);
+        
         $files = parent::getContext()->getRequest()->files;
-        $list_images_uploaded = $files->get('Project')['projectImages'];
-
+        $list_images_uploaded = array_values($files->get('Project')['projectImages']);
         $request = parent::getContext()->getRequest()->request;
+        
+        $listImageToDelete = array_values($request->all('Project')["projectImages"]);
+        // dd($list_project_images,  $listImageToDelete, $list_images_uploaded);
 
-        $listImageToDelete = $request->all('Project')["projectImages"];
+        // https://github.com/EasyCorp/EasyAdminBundle/issues/2662
+        // https://stackoverflow.com/questions/34967795/order-of-symfony-form-collectiontype-field
+
 
         if (count($list_images_uploaded) === 0) {
             $entityInstance->setIsOnline(false);
@@ -90,20 +80,23 @@ class ProjectCrudController extends AbstractCrudController
             $slugger = new AsciiSlugger();
 
             foreach ($list_project_images as $index => $value) {
-                $file = $list_images_uploaded[$index]["name"];
+                $pos = $index;
+                $value = $list_project_images[$pos];
+                $file = $list_images_uploaded[$pos]["name"];
+
                 $hasToBeDeleted = false;
-                if (array_key_exists('delete', $listImageToDelete[$index])) {
-                    $hasToBeDeleted = $listImageToDelete[$index]["delete"] == "on";
+                if (array_key_exists('delete', $listImageToDelete[$pos])) {
+                    $hasToBeDeleted = $listImageToDelete[$pos]["delete"] == "on";
                 }
 
                 if (is_null($file)) {
-                    if (is_null($value->getName()) ) {
+                    if ($hasToBeDeleted == true) {
+                        $value->removeUpload($this->getParameter('projects_images_directory'));
+                        $qb = $em->createQueryBuilder()->delete("App\Entity\ProjectImage", "pi")->where('pi.id = :id')->setParameter("id", $value->getId())->getQuery();
+                        $qb->execute();
+                    } else if (is_null($value->getName())) {
                         $entityInstance->removeProjectImage($value);
                     }
-                else if($hasToBeDeleted == true) {
-                    $qb = $em->createQueryBuilder()->delete("App\Entity\ProjectImage", "pi")->where('pi.id = :id')->setParameter("id", $value->getId())->getQuery();
-                    $qb->execute();
-                }
                 } else {
                     $oldFileName = $value->getName();
                     $uniqueid = uniqid();

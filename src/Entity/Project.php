@@ -127,7 +127,13 @@ class Project
      */
     public function getProjectImages(): Collection
     {
-        return $this->projectImages;
+        $iterator = $this->projectImages->getIterator();
+        $iterator->uasort(function ($a, $b) {
+            return ($a->getPosition() < $b->getPosition()) ? -1 : 1;
+        });
+        $collection = new ArrayCollection(iterator_to_array($iterator));
+
+        return $collection;
     }
 
     public function addProjectImage(ProjectImage $projectImage): self
