@@ -1,16 +1,31 @@
-{% extends 'front/base.html.twig' %}
-{% block title %}
-  Projets
-{% endblock %} {% block css_page %}
-  <link rel="stylesheet"
-    href="{{ asset('ressources/css/project.css') }}" />
+{% extends 'front/base.html.twig' %} {% block title %} Projets {% endblock %} {%
+block css_page %}
+<link rel="stylesheet" href="{{ asset('ressources/css/project.css') }}" />
+{% endblock %} 
+{% block blur_bg %}
+{% set first_image = project.projectImages|first %}
+{% set first_image_path = asset("uploads/projects/" ~ first_image.name)|imagine_filter('details_project_image_blur') %}
+<div class="bg-image" style="background-image: url('{{ first_image_path }}')"></div>
 {% endblock %}
 
 {% block main %}
-  <p class="side-title-project">
-    {{ project.name }}
-  </p>
-  <p class="title-project">
-    {{ project.name }}
-  </p>
+
+<section class="main-container">
+<h1 class="side-title-project">
+  {{ project.name }}
+</h1>
+<p class="title-project">
+  {{ project.name }}
+</p>
+
+<ul class="detail-project">
+  {% for image in project.projectImages %}
+  <li class="project">
+    <figure>
+        <img src="{{ asset("uploads/projects/" ~ image.name)|imagine_filter('details_project_image') }}" alt="" loading="lazy" />
+    </figure>
+  </li>
+  {% endfor %}
+</ul>
+</section>
 {% endblock %}

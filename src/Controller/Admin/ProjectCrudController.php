@@ -20,12 +20,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 
 use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\HttpFoundation\File\File;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 
-
-use App\Service\FileUploader;
+// use App\Service\FileUploader;
 
 class ProjectCrudController extends AbstractCrudController
 {
@@ -168,7 +167,7 @@ class ProjectCrudController extends AbstractCrudController
         foreach ($list_project_images as $index => $value) {
             $value->removeUpload($this->getParameter('projects_images_directory'));
         }
-        
+
         parent::deleteEntity($entityManager, $entityInstance);
     }
 
@@ -186,7 +185,9 @@ class ProjectCrudController extends AbstractCrudController
             // you can pass a PHP closure as the value of the title
             ->setPageTitle('new', "Nouveau projet")
             ->setPageTitle('edit', fn (Project $category) => sprintf('Modifier <b>%s</b>', $category->getName()))
-            ->addFormTheme('admin/field/project-image.html.twig');
+            ->addFormTheme('admin/field/project-image.html.twig')
+            ->showEntityActionsInlined()
+            ;
         // ->setPageTitle('edit', "Modifier %entity_is_online%");
     }
 
@@ -211,9 +212,9 @@ class ProjectCrudController extends AbstractCrudController
             ->renderAsSwitch(false)->onlyOnForms()
             ->setHelp("Ne sera pas mis en ligne s'il n'y a pas d'images liées");
         yield BooleanField::new('is_online', "Est en ligne")->renderAsSwitch(false)->hideOnForm();
-        yield BooleanField::new('is_online', "Mettre en ligne")
-            ->renderAsSwitch(true)
-            ->hideOnForm();
+        // yield BooleanField::new('is_online', "Mettre en ligne")
+        //     ->renderAsSwitch(true)
+        //     ->hideOnForm();
         // ->setFormTypeOptions(['disabled' =>true, 'title' => "Ne sera pas pris en compte s'il n'a pas d'images"]);
 
         yield BooleanField::new('in_biography', "Afficher la première image dans la biographie")
@@ -228,8 +229,8 @@ class ProjectCrudController extends AbstractCrudController
             ->setChoices($list_years);
         yield CollectionField::new('projectImages', 'Images associées')
             ->setEntryType(ProjectImageType::class)
-            ->renderExpanded()
-            ->onlyOnForms();
+            ->renderExpanded();
+        // ->onlyOnForms();
     }
 
     public function configureAssets(Assets $assets): Assets
@@ -238,4 +239,9 @@ class ProjectCrudController extends AbstractCrudController
             ->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')
             ->addJsFile('ressources/js/reorder-project-images.js');
     }
+
+    // public function configureActions(Actions $actions): Actions
+    // {
+    //     return $actions->showEntityActionsInlined();
+    // }
 }
