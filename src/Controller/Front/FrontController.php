@@ -6,17 +6,32 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Repository\ProjectRepository;
+use App\Repository\ProjectImageRepository;
+
+use Doctrine\Persistence\ManagerRegistry;
+
+use App\Entity\Project;
+use App\Entity\ProjectImage;
+
 
 class FrontController extends AbstractController
 {
     /**
      * @Route("/{page}", name="index", requirements={"page"="\d+"})
      */
-    public function index(ProjectRepository $projectRepository, int $page = 1)
+    public function index(ManagerRegistry $doctrine, int $page = 1)
     {
-        // dd($projectRepository->findAll());
+        $projectRepositiory = $doctrine->getRepository(Project::class);
+        $projectImageRepositiory = $doctrine->getRepository(ProjectImage::class);
+        // $dql = 'SELECT p FROM Project p LEFT JOIN author A ON B.id = A.book_id';
+
+        // $em = $this->getDoctrine()->getManager();
+        // $query = $em->createQuery($dql)
+        //     ->setParameter('category', 'projet');
+
+        // dd($projectImageRepositiory->findAll());
         return $this->render('front/index.html.twig', [
-            "list_projects" => $projectRepository->findAll()
+            "list_projects" => $projectImageRepositiory->findAll()
         ]);
     }
 

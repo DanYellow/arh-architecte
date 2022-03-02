@@ -13,6 +13,11 @@
 /node_modules/
 /public/build/
 /public/uploads/
+/public/media/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###
