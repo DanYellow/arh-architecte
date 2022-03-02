@@ -11,7 +11,7 @@ block css_page %}
     <article class="project">
       <a href="{{ path('project', {'id': project.id }) }}" title="Voir projet {{ project.name }}">
         <figure>
-          <img src="{{ asset(project.name) | imagine_filter('my_thumb') }}" alt="" loading="lazy" />
+          <img src="{{ asset("uploads/projects/" ~ project.name)|imagine_filter('home_thumb') }}" alt="" loading="lazy" />
           <article class="icon-container">
             <svg
               xmlns="http://www.w3.org/2000/svg"
