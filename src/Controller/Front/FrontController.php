@@ -21,13 +21,17 @@ class FrontController extends AbstractController
      */
     public function index(ManagerRegistry $doctrine, int $page = 1)
     {
-        $dql = 'SELECT p FROM App\Entity\Project p WHERE p.is_online = 1';
+        $projectRepositiory = $doctrine->getRepository(Project::class);
+        $projectImageRepositiory = $doctrine->getRepository(ProjectImage::class);
+        // $dql = 'SELECT p FROM Project p LEFT JOIN author A ON B.id = A.book_id';
 
-        $em = $doctrine->getManager();
-        $query = $em->createQuery($dql)->getResult();
-        
+        $em = $this->getDoctrine()->getManager();
+        // $query = $em->createQuery($dql)
+        //     ->setParameter('category', 'projet');
+
+        // dd($projectImageRepositiory->findAll());
         return $this->render('front/index.html.twig', [
-            "list_projects" => $query
+            "list_projects" => $projectImageRepositiory->findAll()
         ]);
     }
 
