@@ -45,6 +45,26 @@ class ProjectRepository extends ServiceEntityRepository
         }
     }
 
+    public function getProjectsForPage($page, $limit)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->where('p.is_online = 1')
+            ->orderBy('p.created_at')
+            ->setFirstResult(($page * $limit) - $limit)
+            ->setMaxResults($limit);
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function getTotalProjects()
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('COUNT(p)')
+            ->where('p.is_online = 1');
+
+        return $query->getQuery()->getSingleScalarResult();
+    }
+
     // /**
     //  * @return Project[] Returns an array of Project objects
     //  */

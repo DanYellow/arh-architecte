@@ -55,39 +55,3 @@
         // }
     }
 }
-
-.pagination-list {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
-    font-size: 1.25rem;
-    column-gap: 1rem;
-    font-weight: bold;
-
-    .pagination-list-item {
-        a {
-            color: var(--black-text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0.25rem;
-            width: 30px;
-            height: 30px;
-            text-align: center;
-            font-weight: 400;
-
-            &.active {
-                font-weight: 600;
-            }
-            &:hover, &:focus {
-                color: var(--pink-color);
-            }
-            &:active {
-                color: var(--blue-color);
-            }
-        }
-        select {
-            font-size: inherit;
-        }
-    }
-}
