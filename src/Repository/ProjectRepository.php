@@ -49,7 +49,7 @@ class ProjectRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('p')
             ->where('p.is_online = 1')
-            ->orderBy('p.created_at')
+            ->orderBy('p.year, p.created_at')
             ->setFirstResult(($page * $limit) - $limit)
             ->setMaxResults($limit);
 
@@ -63,6 +63,16 @@ class ProjectRepository extends ServiceEntityRepository
             ->where('p.is_online = 1');
 
         return $query->getQuery()->getSingleScalarResult();
+    }
+
+    public function getBiographyProjects()
+    {
+        $query = $this->createQueryBuilder('p')
+            ->where('p.is_online = 1')
+            ->andWhere('p.in_biography = 3')
+            ->setMaxResults(3);
+
+        return $query->getQuery()->getResult();
     }
 
     // /**

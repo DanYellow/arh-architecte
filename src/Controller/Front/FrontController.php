@@ -22,7 +22,7 @@ class FrontController extends AbstractController
     public function index(ProjectRepository $projectRepositiory, Request $request)
     {
         $currentPage = (int)$request->query->get('page', 1);
-        $numberItemsPerPage = 3;
+        $numberItemsPerPage = 1;
         $listProjects = $projectRepositiory->getProjectsForPage($currentPage, $numberItemsPerPage);
 
         $nbTotalProjects = $projectRepositiory->getTotalProjects();
@@ -36,11 +36,13 @@ class FrontController extends AbstractController
     /**
      * @Route("/a-propos", name="a_propos")
      */
-    public function about()
+    public function about(ProjectRepository $projectRepositiory)
     {
-        return $this->render('front/about.html.twig', [
-            "list_projects" => ["", "", ""]
-        ]);
+        $listProjects = $projectRepositiory->getBiographyProjects();
+        return $this->render(
+            'front/about.html.twig', 
+            compact('listProjects')
+        );
     }
 
     /**

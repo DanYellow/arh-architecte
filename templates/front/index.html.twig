@@ -1,22 +1,21 @@
 {% extends 'front/base.html.twig' %}
 {% block title %}
-	Projets
+	Projets — Armelle Richard-Hue Architecte DPLG
 {% endblock %}
 {%
 block css_page %}
 	<link rel="stylesheet" href="{{ absolute_url('ressources/css/list-projects.css') }}"/>
 {% endblock %}
 {% block main %}
-
 	<ul class="list-projects">
 		{% for project in listProjects %}
-			{% set first_image = project.projectImages|first %}
+			{% set firstImage = project.projectImages|first %}
 
 			<li class="project-container">
 				<article class="project">
 					<a href="{{ path('project', {'id': project.id }) }}" title="Voir projet {{ project.name }}">
 						<figure>
-							<img src="{{ asset("uploads/projects/" ~ first_image.name)|imagine_filter('home_thumb') }}" alt="" loading="lazy"/>
+							<img src="{{ asset("uploads/projects/" ~ firstImage.name)|imagine_filter('home_thumb') }}" alt="" loading="lazy"/>
 							<article class="icon-container">
 								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 									<path d="M7.33 24l-2.83-2.829 9.339-9.175-9.339-9.167 2.83-2.829 12.17 11.996z"/>
@@ -40,19 +39,21 @@ block css_page %}
 						{{nbPage}}
 					</a>
 				</li>
+				{% if (nbPage == 3) %}
 				<li class="pagination-list-item">
-					<select name="" id="" data-pagination-select="">
+					<select data-pagination-select="">
 						<option value="" disabled>[...]</option>
 						{% for nbPage in 1..((nbTotalProjects / numberItemsPerPage)|round(0, 'ceil')) %}
-							<option value="{{ nbPage }}">{{ nbPage }}</option>
+							<option {{ currentPage == nbPage ? "selected" : "" }} value="{{ nbPage }}">{{ nbPage }}</option>
 						{% endfor %}
 					</select>
 				</li>
+				{% endif %}
 			{% endfor %}
 		</ul>
 	</nav>
-
 {% endblock %}
+
 {% block javascripts %}
 	<script src="ressources/js/pagination.js"></script>
 {% endblock %}

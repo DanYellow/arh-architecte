@@ -31,20 +31,17 @@ class ProjectImageType extends AbstractType
             'required' => false,
             'constraints' => [
                 new Image([
-                    'maxSize' => '2048k',
+                    'maxSize' => '3M', // 3048k
                     'mimeTypes' => ProjectImageType::MIME_TYPES,
                     'mimeTypesMessage' => 'Merci de bien vouloir uploader une image correcte',
                 ])
             ],
-
-            // 'data_class' => null,
         ]);
 
         $builder->add('position', NumberType::class, [
             'mapped' => true,
             'required' => false,
         ]);
-
         $builder->get('position')
             ->addModelTransformer(new CallbackTransformer(
                 function () {

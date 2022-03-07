@@ -2,3 +2,4 @@
 - run sql : `php bin/console dbal:run-sql 'SELECT * FROM foo'`
 - clear cache : `php bin/console cache:clear --env=dev`
 - start server : `symfony server:start`
+- update db : `php bin/console doctrine:schema:update --force`

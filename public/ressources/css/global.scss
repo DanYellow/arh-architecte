@@ -89,6 +89,7 @@ main {
             color: var(--black-text-color);
             font-size: 1.25rem;
             letter-spacing: 0.3rem;
+            white-space: nowrap;
 
             &.active {
                 font-weight: 600;

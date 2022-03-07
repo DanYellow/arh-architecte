@@ -48,16 +48,17 @@ class ProjectCrudController extends AbstractCrudController
         $list_project_images = $entityInstance->getProjectImages()->toArray();
 
         $files = parent::getContext()->getRequest()->files;
-        $list_images_uploaded = array_values($files->get('Project')['projectImages']);
+        // dd($files->get('Project'));
+        $list_images_uploaded = null !== $files->get('Project') ? array_values($files->get('Project')['projectImages']) : [];
 
-        $request = parent::getContext()->getRequest()->request;
-        $listImageToDelete = array_values($request->all('Project')["projectImages"]);
-
+        
         if (count($list_images_uploaded) === 0) {
             $entityInstance->setIsOnline(false);
             $entityInstance->setInBiography(false);
         } else {
             $slugger = new AsciiSlugger();
+            $request = parent::getContext()->getRequest()->request;
+            $listImageToDelete = array_values($request->all('Project')["projectImages"]);
 
             foreach ($list_project_images as $index => $value) {
                 $hasToBeDeleted = false;
@@ -219,6 +220,7 @@ class ProjectCrudController extends AbstractCrudController
 
         yield BooleanField::new('in_biography', "Afficher la première image dans la biographie")
             ->renderAsSwitch(false)
+            ->setHelp('Nécessite que le projet ait été mis en ligne')
             ->onlyOnForms();
         yield BooleanField::new('in_biography', "Affiché dans la biographie")
             ->renderAsSwitch(false)
@@ -227,7 +229,7 @@ class ProjectCrudController extends AbstractCrudController
         yield ChoiceField::new('year', "Année")
             ->setHelp("Choisir l'année 0000 pour ne pas afficher de date")
             ->setChoices($list_years);
-        yield CollectionField::new('projectImages', 'Images associées')
+        yield CollectionField::new('projectImages', 'Images associées (3 Mo max par image)')
             ->setEntryType(ProjectImageType::class)
             ->renderExpanded();
         // ->onlyOnForms();
