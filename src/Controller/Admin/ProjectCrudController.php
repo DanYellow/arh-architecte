@@ -16,15 +16,15 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-
-// use App\Service\FileUploader;
 
 class ProjectCrudController extends AbstractCrudController
 {
@@ -51,7 +51,6 @@ class ProjectCrudController extends AbstractCrudController
         // dd($files->get('Project'));
         $list_images_uploaded = null !== $files->get('Project') ? array_values($files->get('Project')['projectImages']) : [];
 
-        
         if (count($list_images_uploaded) === 0) {
             $entityInstance->setIsOnline(false);
             $entityInstance->setInBiography(false);
@@ -156,7 +155,7 @@ class ProjectCrudController extends AbstractCrudController
             }
         }
 
-        parent::persistEntity($em, $entityInstance);
+        parent::updateEntity($em, $entityInstance);
     }
 
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
@@ -171,7 +170,6 @@ class ProjectCrudController extends AbstractCrudController
 
         parent::deleteEntity($entityManager, $entityInstance);
     }
-
 
     public function configureCrud(Crud $crud): Crud
     {
@@ -203,12 +201,11 @@ class ProjectCrudController extends AbstractCrudController
         $list_years = (array) $list_years;
         $list_years["0000"] = -1;
 
-        // dd($list_years);
-
         yield IdField::new('id')->hideOnForm()->hideOnDetail();
-        yield Field::new('name', "Nom");
+        yield Field::new('name', "Nom")->setRequired(true);
         yield DateTimeField::new('created_at', 'Crée le')->hideOnForm();
 
+        yield SlugField::new('slug')->setTargetFieldName('name')->hideOnForm()->hideOnIndex();
         yield BooleanField::new('is_online', "Mettre en ligne")
             ->renderAsSwitch(false)->onlyOnForms()
             ->setHelp("Ne sera pas mis en ligne s'il n'y a pas d'images liées");
@@ -231,7 +228,11 @@ class ProjectCrudController extends AbstractCrudController
             ->setChoices($list_years);
         yield CollectionField::new('projectImages', 'Images associées (3 Mo max par image)')
             ->setEntryType(ProjectImageType::class)
-            ->renderExpanded();
+            ->renderExpanded()
+            ->onlyOnForms();
+        
+        yield AssociationField::new('projectImages', 'Nombre d’images associées')
+        ->hideOnForm();
         // ->onlyOnForms();
     }
 
@@ -244,6 +245,7 @@ class ProjectCrudController extends AbstractCrudController
 
     // public function configureActions(Actions $actions): Actions
     // {
-    //     return $actions->showEntityActionsInlined();
+    //     return $actions->reorder(Crud::PAGE_INDEX, [Action::DETAIL, 'viewInvoice', Action::DELETE, Action::EDIT])
+    //     ;
     // }
 }

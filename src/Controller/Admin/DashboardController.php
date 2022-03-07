@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 use App\Entity\Project;
@@ -36,8 +37,10 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToCrud('Projets', 'fas fa-list', Project::class);
-        // yield MenuItem::linkToCrud('ProjectImage', 'fas fa-list', ProjectImage::class);
+        yield MenuItem::subMenu('Projets', 'fas fa-bars')->setSubItems([
+            MenuItem::linkToCrud('Afficher projets', 'fas fa-eye', Project::class),
+            MenuItem::linkToCrud('Créer projet', 'fas fa-plus', Project::class)->setAction(Crud::PAGE_NEW),
+        ]);
 
         yield MenuItem::section();
         yield MenuItem::linkToUrl('Accéder au site', "fa fa-anchor", '/');
