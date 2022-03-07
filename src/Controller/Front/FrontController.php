@@ -22,7 +22,7 @@ class FrontController extends AbstractController
     public function index(ProjectRepository $projectRepositiory, Request $request)
     {
         $currentPage = (int)$request->query->get('page', 1);
-        $numberItemsPerPage = 1;
+        $numberItemsPerPage = 3;
         $listProjects = $projectRepositiory->getProjectsForPage($currentPage, $numberItemsPerPage);
 
         $nbTotalProjects = $projectRepositiory->getTotalProjects();

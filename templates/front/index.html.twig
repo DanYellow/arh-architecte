@@ -2,10 +2,11 @@
 {% block title %}
 	Projets — Armelle Richard-Hue Architecte DPLG
 {% endblock %}
-{%
-block css_page %}
-	<link rel="stylesheet" href="{{ absolute_url('ressources/css/list-projects.css') }}"/>
+{% block css_page %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" integrity="sha512-Oy+sz5W86PK0ZIkawrG0iv7XwWhYecM3exvUtMKNJMekGFJtVAhibhRPTpmyTj8+lJCkmWfnpxKgT2OopquBHA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="{{ absolute_url('ressources/css/list-projects.css') }}"/>
 {% endblock %}
+
 {% block main %}
 	<ul class="list-projects">
 		{% for project in listProjects %}
@@ -33,16 +34,30 @@ block css_page %}
 
 	<nav class="pagination">
 		<ul class="pagination-list">
-			{% for nbPage in 1..((nbTotalProjects / numberItemsPerPage)|round(0, 'ceil')) %}
+			<li class="pagination-list-item">
+				<a href="?page={{ ( currentPage - 1 > 0 ) ? currentPage - 1 : currentPage  }}">
+					<i class="bi bi-arrow-left"></i>
+				</a>
+			</li>
+			{% set nbPagesMax = (nbTotalProjects / numberItemsPerPage)|round(0, 'ceil') %}
+			{% for nbPage in 1..nbPagesMax %}
+			{% if (
+				nbPage == 1 or 
+				nbPage == currentPage + 1 or
+				nbPage == currentPage - 1 or
+				nbPage == currentPage or
+				nbPage == nbPagesMax - 1 or
+				nbPage == nbPagesMax
+			) %}
 				<li class="pagination-list-item">
 					<a href="?page={{ nbPage }}" class="{{ (currentPage == nbPage) ? 'active' : '' }}">
 						{{nbPage}}
 					</a>
 				</li>
-				{% if (nbPage == 3) %}
+				{% endif %}
+				{% if ((nbPagesMax / 2)|round(0, 'ceil') == nbPage) %}
 				<li class="pagination-list-item">
 					<select data-pagination-select="">
-						<option value="" disabled>[...]</option>
 						{% for nbPage in 1..((nbTotalProjects / numberItemsPerPage)|round(0, 'ceil')) %}
 							<option {{ currentPage == nbPage ? "selected" : "" }} value="{{ nbPage }}">{{ nbPage }}</option>
 						{% endfor %}
@@ -50,6 +65,12 @@ block css_page %}
 				</li>
 				{% endif %}
 			{% endfor %}
+
+			<li class="pagination-list-item {{ ( currentPage == nbPagesMax ) ? "disabled" : "" }}">
+				<a href="?page={{ ( currentPage + 1 <= nbPagesMax ) ? currentPage + 1 : currentPage  }}">
+					<i class="bi bi-arrow-right"></i>
+				</a>
+			</li>
 		</ul>
 	</nav>
 {% endblock %}

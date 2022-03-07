@@ -85,6 +85,8 @@ class ProjectCrudController extends AbstractCrudController
             }
         }
 
+        $this->addFlash("success", "<b>{$entityInstance->getName()}</b> a été crée");
+
         parent::persistEntity($em, $entityInstance);
     }
 
@@ -93,7 +95,6 @@ class ProjectCrudController extends AbstractCrudController
         if (!$entityInstance instanceof Project) return;
 
         $list_project_images = $entityInstance->getProjectImages()->toArray();
-
 
         // dd($list_project_images,  $listImageToDelete, $list_images_uploaded);
 
@@ -155,6 +156,8 @@ class ProjectCrudController extends AbstractCrudController
             }
         }
 
+        $this->addFlash("success", "<b>{$entityInstance->getName()}</b> a été mis à jour");
+
         parent::updateEntity($em, $entityInstance);
     }
 
@@ -167,6 +170,8 @@ class ProjectCrudController extends AbstractCrudController
         foreach ($list_project_images as $index => $value) {
             $value->removeUpload($this->getParameter('projects_images_directory'));
         }
+
+        $this->addFlash("success", "<b>{$entityInstance->getName()}</b> a été supprimé");
 
         parent::deleteEntity($entityManager, $entityInstance);
     }
