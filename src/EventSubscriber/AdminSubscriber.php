@@ -1,54 +1,34 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\EventSubscriber;
 
-use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityDeletedEvent;
-
+use App\Entity\Category;
+use App\Entity\Product;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
-
-use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
-use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Translation\TranslatableMessage;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
-final class EasyAdminListener implements EventSubscriberInterface
+
+final class AdminSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private SessionInterface $session)
-    {
-        dd($session);
-    }
-
-    public static function getSubscribedEvents(): array
+    public static function getSubscribedEvents()
     {
         return [
-            AfterEntityPersistedEvent::class => ['flashMessageAfterPersist'],
-            AfterEntityUpdatedEvent::class => ['flashMessageAfterUpdate'],
-            AfterEntityDeletedEvent::class => ['flashMessageAfterDelete'],
+            BeforeEntityPersistedEvent::class => ['setCreatedAt'],
+            BeforeEntityUpdatedEvent::class => ['setUpdatedAt']
         ];
     }
 
-    public function flashMessageAfterPersist(AfterEntityPersistedEvent $event): void
+    public function setCreatedAt(BeforeEntityPersistedEvent $event)
     {
-        $this->session->getFlashBag()->add('success', new TranslatableMessage('content_admin.flash_message.create', [
-            '%name%' => (string) $event->getEntityInstance(),
-        ], 'admin'));
     }
 
-    public function flashMessageAfterUpdate(AfterEntityUpdatedEvent $event): void
+    public function setUpdatedAt(BeforeEntityUpdatedEvent $event)
     {
-        dd("gg");
-        $this->session->getFlashBag()->add('success', new TranslatableMessage('content_admin.flash_message.update', [
-            '%name%' => (string) $event->getEntityInstance(),
-        ], 'admin'));
-    }
-
-    public function flashMessageAfterDelete(AfterEntityDeletedEvent $event): void
-    {
-        $this->session->getFlashBag()->add('success', new TranslatableMessage('content_admin.flash_message.delete', [
-            '%name%' => (string) $event->getEntityInstance(),
-        ], 'admin'));
+        // dd($event);
     }
 }
