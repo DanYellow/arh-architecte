@@ -2,56 +2,59 @@
 {% set descriptionPage = 'Projet ' ~ project.name ~ ' par Armelle Richard-Hue Architecte DPLG' %}
 {% set currentPath = app.request.uri %}
 
-{% extends 'front/base.html.twig' %} 
-{% block title %} {{ titlePage }} {% endblock %} 
+{% extends 'front/base.html.twig' %}
+{% block title %}
+    {{ titlePage }}
+{% endblock %}
 {% block css_page %}
-<link rel="stylesheet" href="{{ asset('ressources/css/project.min.css') }}" />
-{% endblock %} {% block blur_bg %} {% set first_image =
-project.projectImages|first %} {% set first_image_path =
-asset("uploads/projects/" ~
-first_image.name)|imagine_filter('details_project_image_blur') %}
-<div
-  class="bg-image"
-  style="background-image: url('{{ first_image_path }}')"
-></div>
-{% endblock %} 
-{% block head %} 
-{% set firstImage = project.projectImages|first %}
-<meta name="title" content="{{ titlePage }}">
-<meta name="description" content="{{ descriptionPage }}">
+    <link rel="stylesheet" href="{{ asset('ressources/css/project.min.css') }}"/>
+{% endblock %}
+{% block blur_bg %}
+    {% set first_image = project.projectImages|first %}
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://metatags.io/">
-<meta property="og:title" content="{{ titlePage }}">
-<meta property="og:description" content="{{ descriptionPage }}">
-<meta property="og:image" content="{{ asset("uploads/projects/" ~ firstImage.name)|imagine_filter('details_project_image') }}">
+    {% set first_image_path = asset("uploads/projects/" ~ first_image.name)|imagine_filter('details_project_image_blur') %}
+    <div class="bg-image" style="background-image: url('{{ first_image_path }}')"></div>
+{% endblock %}
 
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="{{ currentPath }}">
-<meta property="twitter:title" content="{{ titlePage }}">
-<meta property="twitter:description" content="{{ descriptionPage }}">
-<meta property="twitter:image" content="{{ asset("uploads/projects/" ~ firstImage.name)|imagine_filter('details_project_image') }}">
-{% endblock %} {% block main %}
+{% block head %}
+    {% set firstImage = project.projectImages|first %}
+    <meta name="title" content="{{ titlePage }}">
+    <meta name="description" content="{{ descriptionPage }}">
 
-<section class="main-container">
-  <!-- <p class="side-title-project">
-    {# project.name #}
-  </p> -->
-  <h1 class="title-project">
-    {{ project.name }}
-  </h1>
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://metatags.io/">
+    <meta property="og:title" content="{{ titlePage }}">
+    <meta property="og:description" content="{{ descriptionPage }}">
+    <meta
+    property="og:image" content="{{ asset("uploads/projects/" ~ firstImage.name)|imagine_filter('details_project_image') }}">
 
-  <ul class="detail-project">
-    {% for image in project.projectImages %}
-    <li class="project">
-      <figure>
-        <img src="{{ asset("uploads/projects/" ~ image.name)|imagine_filter('details_project_image')
-        }}" alt="" loading="lazy" />
-      </figure>
-    </li>
-    {% endfor %}
-  </ul>
-</section>
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ currentPath }}">
+    <meta property="twitter:title" content="{{ titlePage }}">
+    <meta property="twitter:description" content="{{ descriptionPage }}">
+    <meta property="twitter:image" content="{{ asset("uploads/projects/" ~ firstImage.name)|imagine_filter('details_project_image') }}">
+{% endblock %}
+{% block main %}
+
+    <section
+        class="main-container">
+        <!-- <p class="side-title-project">
+                    {# project.name #}
+                  </p> -->
+        <h1 class="title-project">
+            {{ project.name }}
+        </h1>
+
+        <ul class="detail-project">
+            {% for image in project.projectImages %}
+                <li class="project">
+                    <figure>
+                        <img src="{{ asset("uploads/projects/" ~ image.name)|imagine_filter('details_project_image') }}" alt="" loading="lazy"/>
+                    </figure>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
 {% endblock %}
