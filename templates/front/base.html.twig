@@ -27,6 +27,9 @@
   </head>
 
   <body>
+    {% if app.user %}
+      <section class="connecte">Hello</section>
+{% endif %}
     {% include 'front/includes/header.html.twig' %}
     {% block blur_bg %}{% endblock %}
     <main>
