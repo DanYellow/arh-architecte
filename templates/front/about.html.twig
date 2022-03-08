@@ -1,43 +1,53 @@
 {% extends 'front/base.html.twig' %}
 {% block title %}
-  A propos — Armelle Richard-Hue Architecte DPLG
+	A propos — Armelle Richard-Hue Architecte DPLG
 {% endblock %}
 
 {% block css_page %}
-  <link rel="stylesheet"
-    href="{{ absolute_url('ressources/css/a-propos.min.css') }}" />
+	<link rel="stylesheet" href="{{ absolute_url('ressources/css/a-propos.min.css') }}"/>
 {% endblock %}
 
 {% block main %}
-  <section class="main-container">
-    <section class="sided-content">
-      <ul class="list-projects"></ul>
-    </section>
-    <section class="biography">
-      <header class="header">
-        <figure>
-          <img src="{{ asset('ressources/images/photo-profil-armelle.jpg') }}"
-            alt="Armelle_Richard_Photo portrait" />
-        </figure>
-        <article class="short-description">
-          <h1 class="title">
-            armelle richard-hue
-          </h1>
-          <p class="description">
-            architecte dplg
-          </p>
-        </article>
-      </header>
-      <ul class="details">
-        <li>Diplômée en 1992 de l’Ecole d’Architecture de Paris la Seine</li>
-        <li>Exercice libéral depuis 1997</li>
-        <li>Collaboration avec le cabinet ACRA sur projets et concours</li>
-        <li>
-          Se spécialise auprès d’une clientèle de particuliers dans les projets
-          de rénovation, d’agrandissement ou de surélévation
-        </li>
-        <li>Réalise des missions de conseil en décoration</li>
-      </ul>
-    </section>
-  </section>
+	<section class="main-container">
+		<section class="sided-content">
+			<ul class="list-projects">
+				<li class='project'>
+					<a href='project.php' title='Voir projet d aumale IXe'>
+						<figure>
+							<img src='ressources/images/img-1.jpg' alt='' loading='lazy'>
+							<article class='icon-container'>
+								<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewbox='0 0 24 24'><path d='M7.33 24l-2.83-2.829 9.339-9.175-9.339-9.167 2.83-2.829 12.17 11.996z'/></svg>
+							</article>
+						</figure>
+						<p class='title'>D'AUMALE IXe</p>
+					</a>
+				</li>
+			</ul>
+		</section>
+		<section class="biography">
+			<header class="header">
+				<figure>
+					<img src="{{ asset('ressources/images/photo-profil-armelle.jpg') }}" alt="Armelle_Richard_Photo portrait"/>
+				</figure>
+				<article class="short-description">
+					<h1 class="title">
+						armelle richard-hue
+					</h1>
+					<p class="description">
+						architecte dplg
+					</p>
+				</article>
+			</header>
+			<ul class="details">
+				<li>Diplômée en 1992 de l’Ecole d’Architecture de Paris la Seine</li>
+				<li>Exercice libéral depuis 1997</li>
+				<li>Collaboration avec le cabinet ACRA sur projets et concours</li>
+				<li>
+					Se spécialise auprès d’une clientèle de particuliers dans les projets
+					          de rénovation, d’agrandissement ou de surélévation
+				</li>
+				<li>Réalise des missions de conseil en décoration</li>
+			</ul>
+		</section>
+	</section>
 {% endblock %}
