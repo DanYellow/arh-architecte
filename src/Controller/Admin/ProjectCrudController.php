@@ -237,8 +237,7 @@ class ProjectCrudController extends AbstractCrudController
             ->onlyOnForms();
         
         yield AssociationField::new('projectImages', 'Nombre d’images associées')
-        ->hideOnForm();
-        // ->onlyOnForms();
+            ->hideOnForm();
     }
 
     public function configureAssets(Assets $assets): Assets

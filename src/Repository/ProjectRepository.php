@@ -69,7 +69,8 @@ class ProjectRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('p')
             ->where('p.is_online = 1')
-            ->andWhere('p.in_biography = 3')
+            ->andWhere('p.in_biography = 1')
+            ->orderBy('p.year, p.created_at')
             ->setMaxResults(3);
 
         return $query->getQuery()->getResult();
