@@ -22,10 +22,15 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 
+/**
+ * @IsGranted("ROLE_ADMIN")
+ */
 class ProjectCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
@@ -136,7 +141,7 @@ class ProjectCrudController extends AbstractCrudController
                 } else {
                     $oldFileName = $value->getName();
                     $uniqueid = uniqid();
-                    $newFilename = "{$slugger->slug($entityInstance->getName())}-{$uniqueid}.{$file->guessExtension()}";
+                    $newFilename = strtolower("{$slugger->slug($entityInstance->getName())}-{$uniqueid}.{$file->guessExtension()}");
                     if (!is_null($oldFileName)) {
                         $oldName = explode(".", $oldFileName);
                         $oldName = array_slice($oldName, 0, -1);
@@ -190,8 +195,7 @@ class ProjectCrudController extends AbstractCrudController
             ->setPageTitle('new', "Nouveau projet")
             ->setPageTitle('edit', fn (Project $category) => sprintf('Modifier <b>%s</b>', $category->getName()))
             ->addFormTheme('admin/field/project-image.html.twig')
-            ->showEntityActionsInlined()
-            ;
+            ->showEntityActionsInlined();
         // ->setPageTitle('edit', "Modifier %entity_is_online%");
     }
 
@@ -222,7 +226,10 @@ class ProjectCrudController extends AbstractCrudController
 
         yield BooleanField::new('in_biography', "Afficher la première image dans la biographie")
             ->renderAsSwitch(false)
-            ->setHelp('Nécessite que le projet ait été mis en ligne')
+            ->setHelp('
+                Nécessite que le projet ait été mis en ligne<br> 
+                <b>Seuls les trois premiers projets trouvés seront affichés</b>
+            ')
             ->onlyOnForms();
         yield BooleanField::new('in_biography', "Affiché dans la biographie")
             ->renderAsSwitch(false)
@@ -235,7 +242,7 @@ class ProjectCrudController extends AbstractCrudController
             ->setEntryType(ProjectImageType::class)
             ->renderExpanded()
             ->onlyOnForms();
-        
+
         yield AssociationField::new('projectImages', 'Nombre d’images associées')
             ->hideOnForm();
     }

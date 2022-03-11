@@ -46,7 +46,7 @@
                             </label>
                         </div>
                         <div class="col">
-                            <img src="{{ asset("uploads/projects/" ~ img_path) }}" alt="" data-img="{{ id }}" width="150" accept=""/>
+                            <img src="{{ asset("uploads/projects/" ~ img_path) }}" alt="" data-img="{{ id }}" accept="" style="max-height: 150px; width: auto;"/>
                             <input type="hidden" readonly value="{{ position }}" name="{{ full_name ~ '[position]' }}" data-input-position="{{name}}" class="form-control">
                         </div>
                     </div>

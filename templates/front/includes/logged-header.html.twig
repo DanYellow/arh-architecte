@@ -1,7 +1,7 @@
 {% if app.user and is_granted('ROLE_ADMIN') %}
 	<header class="logged-header">
 		<p>
-			Bonjour • <a href="{{ path("admin") }}" target="_blank" rel="noopener noreferrer">Accéder au back-office (ouverture dans un nouvel onglet)</a>
+			Bonjour {{ app.user.username}} • <a href="{{ path("admin") }}" target="_blank" rel="noopener noreferrer">Accéder au back-office (ouverture dans un nouvel onglet)</a>
 		</p>
 	</header>
 {% endif %}

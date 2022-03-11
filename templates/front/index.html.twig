@@ -44,8 +44,11 @@
 	{% if listProjects|length > 0 %}
 		<nav class="pagination">
 			<ul class="pagination-list">
-				<li class="pagination-list-item">
-					<a href="?page={{ ( currentPage - 1 > 0 ) ? currentPage - 1 : currentPage  }}">
+				<li class="pagination-list-item {{ ( currentPage - 1 > 0 ) ? " disabled" : " " }}">
+					<a 
+						href="?page={{ ( currentPage - 1 > 0 ) ? currentPage - 1 : currentPage  }}"
+						{{ ( currentPage - 1 > 0 ) ? 'aria-label="Page précédente"' : ""  }}
+					>
 						<i class="bi bi-arrow-left"></i>
 					</a>
 				</li>
@@ -77,7 +80,10 @@
 				{% endfor %}
 
 				<li class="pagination-list-item {{ ( currentPage == nbPagesMax ) ? " disabled" : " " }}">
-					<a href="?page={{ ( currentPage + 1 <= nbPagesMax ) ? currentPage + 1 : currentPage  }}">
+					<a 
+						href="?page={{ ( currentPage + 1 <= nbPagesMax ) ? currentPage + 1 : currentPage  }}" 
+						{{ ( currentPage + 1 <= nbPagesMax ) ? 'aria-label="Page suivante"' : ""  }}
+					>
 						<i class="bi bi-arrow-right"></i>
 					</a>
 				</li>
