@@ -40,10 +40,11 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/projet/{id}", name="project", requirements={"page"="\d+"})
+     * @Route("/projet/{id}", name="project")
      */
-    public function a_project(ProjectRepository $projectRepository, int $id)
+    public function a_project(ProjectRepository $projectRepository, string $id)
     {
+        $id = (int)$id;
         $project = $projectRepository->findOneById($id);
         if(!is_null($project)) {
             return $this->render('front/details-project.html.twig', compact('project'));

@@ -5,16 +5,23 @@
 {% block css_page %}
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" integrity="sha512-Oy+sz5W86PK0ZIkawrG0iv7XwWhYecM3exvUtMKNJMekGFJtVAhibhRPTpmyTj8+lJCkmWfnpxKgT2OopquBHA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 	<link rel="stylesheet" href="{{ absolute_url('ressources/css/list-projects.min.css') }}"/>
+	<link rel="stylesheet" href="{{ absolute_url('ressources/css/project.min.css') }}"/>
 {% endblock %}
+
+{% if listProjects|length == 0 %}
+		{% set noGoToBack = true %}
+{% endif %}
 
 {% block main %}
 	{% if listProjects|length == 0 %}
-		<p class="title-project">
-			Pas de projets pour cette page
-		</p>
-		<p class="project-not-found">
-			<a href="{{ path('index') }}">Retourner à la page d'accueil</a>
-		</p>
+		<section class="main-container">
+			<p class="title-project">
+				Pas de projets pour cette page
+			</p>
+			<p class="project-not-found">
+				<a href="{{ path('index') }}">Retourner à la page d'accueil</a>
+			</p>
+	</section>
 	{% endif %}
 
 	<ul class="list-projects">
