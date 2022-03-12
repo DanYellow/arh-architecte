@@ -45,12 +45,17 @@ class FrontController extends AbstractController
     public function a_project(ProjectRepository $projectRepository, string $id)
     {
         $id = (int)$id;
-        $project = $projectRepository->findOneById($id);
+        $project = $projectRepository->findOneBy(
+            array(
+                'id' => $id,
+                'is_online' => true
+            )
+        );
+
         if(!is_null($project)) {
             return $this->render('front/details-project.html.twig', compact('project'));
         }
         
-        // dd(is_null($project));
         $listProjects = $projectRepository->getBiographyProjects();
         return $this->render('front/missing-project.html.twig', compact('listProjects'));
     }
