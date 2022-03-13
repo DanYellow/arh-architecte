@@ -40,16 +40,22 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/projet/{id}", name="project", requirements={"page"="\d+"})
+     * @Route("/projet/{id}", name="project")
      */
-    public function a_project(ProjectRepository $projectRepository, int $id)
+    public function a_project(ProjectRepository $projectRepository, string $id)
     {
-        $project = $projectRepository->findOneById($id);
+        $id = (int)$id;
+        $project = $projectRepository->findOneBy(
+            array(
+                'id' => $id,
+                'is_online' => true
+            )
+        );
+
         if(!is_null($project)) {
             return $this->render('front/details-project.html.twig', compact('project'));
         }
         
-        // dd(is_null($project));
         $listProjects = $projectRepository->getBiographyProjects();
         return $this->render('front/missing-project.html.twig', compact('listProjects'));
     }
