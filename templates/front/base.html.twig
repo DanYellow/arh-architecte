@@ -19,16 +19,38 @@
 		<link rel="icon" type="image/x-icon" href="{{ asset('/favicon.ico') }}"/>
 		<link rel="stylesheet" href="{{ asset('ressources/css/reset.css') }}"/>
 		<link rel="stylesheet" href="{{ asset('ressources/css/global.min.css') }}"/> {% block css_page %}{% endblock %}
-		</head>
 
-		<body>
-			{% include 'front/includes/logged-header.html.twig' %}
-			{% include 'front/includes/header.html.twig' %}
-			{% block blur_bg %}{% endblock %}
-			<main>
-				{% block main %}{% endblock %}
-			</main>
-			{% include 'front/includes/footer.html.twig' %}
-			{% block javascripts %}{% endblock %}
-		</body>
-	</html>
+		{% block metatags %}
+			{% set pageTitle = "Armelle Richard-Hue architecte dplg" %}
+			{% set pageDescription = "Armelle Richard-Hue architecte dplg. Diplômée en 1992 de l’Ecole d’Architecture de Paris la Seine" %}
+			{% set currentPath = app.request.uri %}
+			<meta name="title" content="{{ pageTitle }}">
+			<meta
+			name="description" content="{{ pageDescription }}">
+
+			<!-- Open Graph / Facebook -->
+			<meta property="og:type" content="website">
+			<meta property="og:url" content="{{ currentPath }}">
+			<meta property="og:title" content="{{ pageTitle }}">
+			<meta property="og:description" content="{{ descriptionPage }}">
+
+			<!-- Twitter -->
+			<meta property="twitter:card" content="summary_large_image">
+			<meta property="twitter:url" content="{{ currentPath }}">
+			<meta property="twitter:title" content="{{ pageTitle }}">
+			<meta property="twitter:description" content="{{ pageDescription }}">
+
+		{% endblock %}
+	</head>
+
+	<body>
+		{% include 'front/includes/logged-header.html.twig' %}
+		{% include 'front/includes/header.html.twig' %}
+		{% block blur_bg %}{% endblock %}
+		<main>
+			{% block main %}{% endblock %}
+		</main>
+		{% include 'front/includes/footer.html.twig' %}
+		{% block javascripts %}{% endblock %}
+	</body>
+</html>

@@ -16,14 +16,14 @@
     <div class="bg-image" style="background-image: url('{{ first_image_path }}')"></div>
 {% endblock %}
 
-{% block head %}
+{% block metatags %}
     {% set firstImage = project.projectImages|first %}
     <meta name="title" content="{{ titlePage }}">
     <meta name="description" content="{{ descriptionPage }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://metatags.io/">
+    <meta property="og:url" content="{{ currentPath }}">
     <meta property="og:title" content="{{ titlePage }}">
     <meta property="og:description" content="{{ descriptionPage }}">
     <meta
