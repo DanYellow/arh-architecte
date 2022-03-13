@@ -1,0 +1,21 @@
+{% extends 'front/base.html.twig' %}
+{% set noGoToBack = true %}
+{% block title %}
+	Erreur rencontrée — Armelle
+	Richard-Hue Architecte DPLG
+{% endblock %}
+
+{% block css_page %}
+	<link rel="stylesheet" href="{{ asset('ressources/css/project.min.css') }}"/>
+{% endblock %}
+
+{% block main %}
+	<section class="main-container">
+		<h1 class="title-project">
+			Une erreur inattendue est survenue
+		</h1>
+        <p class="project-not-found">
+			<a href="{{ path('index') }}">Retourner à la page d'accueil</a>
+		</p>
+	</section>
+{% endblock %}
