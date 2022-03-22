@@ -182,9 +182,7 @@ class Project
         return $this;
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function preUpdate() {
         $this->setUpdatedAt(new \DateTimeImmutable());
     }

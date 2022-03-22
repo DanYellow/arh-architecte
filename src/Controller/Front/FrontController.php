@@ -40,7 +40,7 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/projet/{param}", name="project")
+     * @Route("/realisation-architecture/{param}", name="project")
      */
     public function a_project(ProjectRepository $projectRepository, string $param)
     {
