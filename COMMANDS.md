@@ -3,6 +3,7 @@
 - clear cache : `php bin/console cache:clear --env=dev`
 - start server : `symfony server:start`
 - update db : `php bin/console doctrine:schema:update --force`
+- create / update entity : `php bin/console make:entity`
 
 
 - Back to dev :

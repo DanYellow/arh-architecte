@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[UniqueEntity("name")]
 class Project
 {
@@ -39,10 +40,14 @@ class Project
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: ProjectImage::class, cascade: ["persist", "remove"])]
     private $projectImages;
 
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private $updated_at;
+
     public function __construct()
     {
         $this->projectImages = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
         $this->year = date('Y');
         $this->slug = "";
     }
@@ -163,5 +168,24 @@ class Project
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate() {
+        $this->setUpdatedAt(new \DateTimeImmutable());
     }
 }
