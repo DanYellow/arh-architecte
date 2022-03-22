@@ -214,7 +214,6 @@ class ProjectCrudController extends AbstractCrudController
         yield Field::new('name', "Nom")->setRequired(true);
         yield DateTimeField::new('created_at', 'Crée le')->hideOnForm();
 
-        yield SlugField::new('slug')->setTargetFieldName('name')->hideOnForm()->hideOnIndex();
         yield BooleanField::new('is_online', "Mettre en ligne")
             ->renderAsSwitch(false)->onlyOnForms()
             ->setHelp("Ne sera pas mis en ligne s'il n'y a pas d'images liées");
@@ -245,6 +244,11 @@ class ProjectCrudController extends AbstractCrudController
 
         yield AssociationField::new('projectImages', 'Nombre d’images associées')
             ->hideOnForm();
+
+        yield SlugField::new('slug')
+            ->setTargetFieldName('name')
+            ->hideOnIndex()
+        ;
     }
 
     public function configureAssets(Assets $assets): Assets

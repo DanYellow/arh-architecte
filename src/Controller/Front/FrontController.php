@@ -40,16 +40,19 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/projet/{id}", name="project")
+     * @Route("/projet/{param}", name="project")
      */
-    public function a_project(ProjectRepository $projectRepository, string $id)
+    public function a_project(ProjectRepository $projectRepository, string $param)
     {
-        $id = (int)$id;
+        $payload = array('is_online' => true);
+        if(is_numeric($param)) {
+            $payload['id'] = (int)$param;
+        } else {            
+            $payload['slug'] = $param;
+        }
+
         $project = $projectRepository->findOneBy(
-            array(
-                'id' => $id,
-                'is_online' => true
-            )
+            $payload
         );
 
         if(!is_null($project)) {

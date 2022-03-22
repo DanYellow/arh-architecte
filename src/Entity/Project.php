@@ -7,7 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[UniqueEntity("name")]
 class Project
 {
     #[ORM\Id]
@@ -15,7 +18,7 @@ class Project
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $name;
 
     #[ORM\Column(type: 'datetime_immutable')]

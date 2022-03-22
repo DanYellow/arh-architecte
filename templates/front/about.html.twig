@@ -14,7 +14,7 @@
 					{% set firstImage =
       project.projectImages|first %}
 					<li class="project">
-						<a href="{{ path('project', { id: project.id }) }}" title="Voir projet {{ project.name }}">
+						<a href="{{ path('project', { param: project.id }) }}" title="Voir projet {{ project.name }}">
 							<figure>
 								<img src="{{ asset("uploads/projects/" ~ firstImage.name)|imagine_filter('home_thumb') }}" alt="" loading="lazy"/>
 								<article class="icon-container">
