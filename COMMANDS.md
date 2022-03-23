@@ -8,3 +8,5 @@
 
 - Back to dev :
   - `composer install`
+
+https://symfony.com/doc/current/deployment.html

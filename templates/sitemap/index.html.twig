@@ -23,15 +23,15 @@
 			{% endif %}
 
 			{% if url.image is defined and url.image is not empty %}
-                {% for anImage in url.image %}
-                    <image:image>
-                        <image:loc>
-                            {% if anImage.loc|replace({hostname:''}) == anImage.loc %}
-                                {{hostname ~ anImage.loc}}{% else %}{{anImage.loc}}{% endif %}</image:loc>
-                            <image:title>{{ anImage.title }}</image:title>
-                    </image:image>
-		        {% endfor %}
+				{% for anImage in url.image %}
+					<image:image>
+						<image:loc>
+							{{anImage.loc}}
+						</image:loc>
+						<image:title>{{ anImage.title }}</image:title>
+					</image:image>
+				{% endfor %}
 			{% endif %}
-			</url>
-		{% endfor %}
-	</urlset>
+		</url>
+	{% endfor %}
+</urlset>

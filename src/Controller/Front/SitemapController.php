@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Front;
 
 use App\Repository\ProjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,8 +13,8 @@ use \Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
 class SitemapController extends AbstractController
 {
-    #[Route('/sitemap', name: 'app_sitemap', defaults: ['_format' => "xml"]
-    )]
+    #[Route('/sitemap', name: 'app_sitemap', defaults: ['_format' => "xml"])]
+    #[Route('/sitemap.xml', name: 'app_sitemap_file', defaults: ['_format' => "xml"])]
     public function index(Request $request, ProjectRepository $projectRepository, CacheManager $imagineCacheManager): Response
     {
         $hostname = $request->getSchemeAndHttpHost();
@@ -37,7 +37,8 @@ class SitemapController extends AbstractController
             }
 
             $now = $project->getUpdatedAt();
-            if (is_null($now)) {
+
+            if (is_null($now) || $now->format('Y') < 2020) {
                 $now = new \DateTimeImmutable();
             }
 
