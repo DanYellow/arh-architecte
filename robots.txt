@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /ressources/
+Disallow: /admin/
+Disallow: /login/
+
+User-agent: Googlebot
+Allow: /ressources/
+
+Sitemap: http://armellerichard-architecte.fr/sitemap.xml
