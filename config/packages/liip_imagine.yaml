@@ -13,7 +13,9 @@ liip_imagine:
     home_thumb:
       quality: 75
       filters:
-        thumbnail: { size: [902, 1302], mode: outbound }
+        fixed:
+          width: 902
+          height: 1302
     details_project_image:
       filters:
         relative_resize: { widen: 1260 }
